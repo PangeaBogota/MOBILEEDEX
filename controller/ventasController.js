@@ -73,9 +73,9 @@ app_angular.controller("pedidoController",['Conexion','$scope','$location','$htt
 	}
 	try
 	{
-		if ($scope.PedidoRowid.includes('|')) 
+		if ($scope.PedidoRowid.indexOf('p')) 
 		{
-			$scope.PedidoRowid=$scope.Parametro.split('|');
+			$scope.PedidoRowid=$scope.PedidoRowid.replace('p','');
 		}
 	}
 	catch(error)
@@ -88,10 +88,10 @@ app_angular.controller("pedidoController",['Conexion','$scope','$location','$htt
 	if ($scope.PedidoRowid.length==2) {
 		$('.creado').attr("disabled","disabled") 
 		
-		$scope.tituloPagina='Pedido #'+$scope.PedidoRowid[1];
+		$scope.tituloPagina='Pedido #'+$scope.PedidoRowid;
 		$scope.editarpedido=true;
-		CRUD.select("select pe.*,su.rowid_tercero as tercero,maestro.erp_id_maestro from t_pedidos pe inner join erp_terceros_sucursales su on pe.rowid_cliente_facturacion=su.rowid inner join erp_entidades_master  maestro  on pe.rowid_lista_precios=maestro.rowid where pe.rowid='"+$scope.PedidoRowid[1]+"'",function(elem){
-			CRUD.select("select*from t_pedidos where rowid='"+$scope.PedidoRowid[1]+"'",function(pedidoD){
+		CRUD.select("select pe.*,su.rowid_tercero as tercero,maestro.erp_id_maestro from t_pedidos pe inner join erp_terceros_sucursales su on pe.rowid_cliente_facturacion=su.rowid inner join erp_entidades_master  maestro  on pe.rowid_lista_precios=maestro.rowid where pe.rowid='"+$scope.PedidoRowid+"'",function(elem){
+			CRUD.select("select*from t_pedidos where rowid='"+$scope.PedidoRowid+"'",function(pedidoD){
 				$scope.pedidos=pedidoD;
 				$scope.date=$scope.pedidos.fecha_solicitud;
 				$scope.dateEntrega=$scope.pedidos.fecha_entrega;
