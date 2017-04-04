@@ -68,12 +68,13 @@ app_angular.controller("pedidoController",['Conexion','$scope','$location','$htt
 		}
 		
 	});
+	debugger
 	if ($scope.PedidoRowid==undefined) {
 		$scope.PedidoRowid='';
 	}
 	try
 	{
-		if ($scope.PedidoRowid.indexOf('p')) 
+		if ($scope.PedidoRowid.match('p')) 
 		{
 			$scope.PedidoRowid=$scope.PedidoRowid.replace('p','');
 		}
@@ -85,7 +86,7 @@ app_angular.controller("pedidoController",['Conexion','$scope','$location','$htt
 	}
 	
 	
-	if ($scope.PedidoRowid.length==2) {
+	if ($scope.PedidoRowid.length>0) {
 		$('.creado').attr("disabled","disabled") 
 		
 		$scope.tituloPagina='Pedido #'+$scope.PedidoRowid;
