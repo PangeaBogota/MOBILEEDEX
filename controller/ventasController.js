@@ -6,10 +6,7 @@ var app_angular = angular.module('PedidosOnline');
 
 //CONTROLADOR DEL MOULO DE VENTAS
 app_angular.controller("pedidoController",['Conexion','$scope','$location','$http','$routeParams','$timeout',function (Conexion,$scope,$location,$http,$routeParams,$timeout) {
-	try
-	{
-		debugger
-		$scope.tituloPagina='';
+	$scope.tituloPagina='';
 	$scope.ejemplovista=[];
 	$scope.sessiondate=JSON.parse(window.localStorage.getItem("CUR_USER"));
 	$scope.validacion=0;
@@ -61,14 +58,21 @@ app_angular.controller("pedidoController",['Conexion','$scope','$location','$htt
 		}
 	});
 	var pedido=$routeParams.personId;
-	alert(pedido);
 	if (pedido==undefined) {
 		pedido='';
-		alert(pedido);
 	}
-	if (pedido.includes('|')) {
-		pedido=$scope.Parametro.split('|');
+	try
+	{
+		if (pedido.includes('|')) 
+		{
+			pedido=$scope.Parametro.split('|');
+		}
 	}
+	catch
+	{
+		pedido='';
+	}
+	
 	
 	if (pedido.length==2) {
 		$('.creado').attr("disabled","disabled") 
@@ -202,26 +206,34 @@ app_angular.controller("pedidoController",['Conexion','$scope','$location','$htt
     	}
 	}
 	$scope.onChangeTercero=function(){
-		document.getElementById("fecha_entrega").valueAsDate = null;
-		document.getElementById("fecha_solicitud").valueAsDate = null;
-		$scope.criterio=[];
-		$scope.list_Sucursales=[];
-		$scope.list_puntoEnvio=[];
-		$scope.itemsAgregadosPedido=[];
-		$scope.pedidoDetalles=[];
-		$scope.sucursalDespacho=[];
-		$scope.ciudad='';
-		$scope.searchsuc1='';
-		$scope.searchsuc2='';
-		$scope.ciudadSucursal=[];
-		$scope.list_items=[];
-		$scope.filter=[];
-		$scope.list_precios=[];
-		CRUD.select("select  s.codigo_sucursal||'-'||s.nombre_sucursal  sucursal,s.*,e.erp_descripcion from erp_terceros_sucursales s left join erp_entidades_master e on e.id_tipo_maestro='CRITERIO_CLASIFICACION' and e.erp_id_maestro=replace(s.id_criterio_clasificacion,' ','') where s.rowid_tercero = '"+$scope.terceroSelected.rowid+"'   order by s.codigo_sucursal ",function(elem){
+		try
+		{
+			document.getElementById("fecha_entrega").valueAsDate = null;
+			document.getElementById("fecha_solicitud").valueAsDate = null;
+			$scope.criterio=[];
+			$scope.list_Sucursales=[];
+			$scope.list_puntoEnvio=[];
+			$scope.itemsAgregadosPedido=[];
+			$scope.pedidoDetalles=[];
+			$scope.sucursalDespacho=[];
+			$scope.ciudad='';
+			$scope.searchsuc1='';
+			$scope.searchsuc2='';
+			$scope.ciudadSucursal=[];
+			$scope.list_items=[];
+			$scope.filter=[];
+			$scope.list_precios=[];
+			CRUD.select("select  s.codigo_sucursal||'-'||s.nombre_sucursal  sucursal,s.*,e.erp_descripcion from erp_terceros_sucursales s left join erp_entidades_master e on e.id_tipo_maestro='CRITERIO_CLASIFICACION' and e.erp_id_maestro=replace(s.id_criterio_clasificacion,' ','') where s.rowid_tercero = '"+$scope.terceroSelected.rowid+"'   order by s.codigo_sucursal ",function(elem){
 			if (elem.erp_descripcion!=null) {
 				elem.sucursal+=" - "+elem.erp_descripcion
 			}
 			$scope.list_Sucursales.push(elem)})
+		}
+		catch(err)
+		{
+			alert(err);
+		}
+		
 	}
 	CRUD.select("select count(*) as cantidad from erp_entidades_master ",function(elem){console.log(elem.cantidad)})
 	$scope.onChangeSucursal=function(){
@@ -519,11 +531,6 @@ app_angular.controller("pedidoController",['Conexion','$scope','$location','$htt
     angular.element('#ui-id-1').mouseover(function (){
         angular.element('#ui-id-1').show();
     });
-	}
-	catch(err) {
-        alert(err);
-    }
-
 }]);
 
 app_angular.controller("PedidosController",['Conexion','$scope',function (Conexion,$scope) {
