@@ -61,6 +61,7 @@ app_angular.controller("pedidoController",['Conexion','$scope','$location','$htt
 		}
 	});
 	var pedido=$routeParams.personId;
+	alert(pedido);
 	if (pedido==undefined) {
 		pedido='';
 	}
