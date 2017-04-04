@@ -64,6 +64,7 @@ app_angular.controller("pedidoController",['Conexion','$scope','$location','$htt
 	alert(pedido);
 	if (pedido==undefined) {
 		pedido='';
+		alert(pedido);
 	}
 	if (pedido.includes('|')) {
 		pedido=$scope.Parametro.split('|');
