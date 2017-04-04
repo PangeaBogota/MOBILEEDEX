@@ -47,6 +47,7 @@ app_angular.controller("pedidoController",['Conexion','$scope','$location','$htt
 	$scope.searchsuc2='';
 	$scope.filter=[];
 	$scope.criterio=[];
+	$scope.PedidoRowid=$routeParams.personId;
     $scope.Parametro=$routeParams.personId;
     $scope.tituloPagina='Nuevo Pedido';
     $scope.editarpedido=false;
@@ -67,32 +68,30 @@ app_angular.controller("pedidoController",['Conexion','$scope','$location','$htt
 		}
 		
 	});
-	var pedido=$routeParams.personId;
-	alert(pedido);
-	if (pedido==undefined) {
-		pedido='';
+	if ($scope.PedidoRowid==undefined) {
+		$scope.PedidoRowid='';
 	}
 	try
 	{
-		if (pedido.includes('|')) 
+		if ($scope.PedidoRowid.includes('|')) 
 		{
-			pedido=$scope.Parametro.split('|');
+			$scope.PedidoRowid=$scope.Parametro.split('|');
 		}
 	}
 	catch(error)
 	{
-		pedido='';
+		$scope.PedidoRowid='';
 		alert(error + " 2");
 	}
 	
 	
-	if (pedido.length==2) {
+	if ($scope.PedidoRowid.length==2) {
 		$('.creado').attr("disabled","disabled") 
 		
-		$scope.tituloPagina='Pedido #'+pedido[1];
+		$scope.tituloPagina='Pedido #'+$scope.PedidoRowid[1];
 		$scope.editarpedido=true;
-		CRUD.select("select pe.*,su.rowid_tercero as tercero,maestro.erp_id_maestro from t_pedidos pe inner join erp_terceros_sucursales su on pe.rowid_cliente_facturacion=su.rowid inner join erp_entidades_master  maestro  on pe.rowid_lista_precios=maestro.rowid where pe.rowid='"+pedido[1]+"'",function(elem){
-			CRUD.select("select*from t_pedidos where rowid='"+pedido[1]+"'",function(pedidoD){
+		CRUD.select("select pe.*,su.rowid_tercero as tercero,maestro.erp_id_maestro from t_pedidos pe inner join erp_terceros_sucursales su on pe.rowid_cliente_facturacion=su.rowid inner join erp_entidades_master  maestro  on pe.rowid_lista_precios=maestro.rowid where pe.rowid='"+$scope.PedidoRowid[1]+"'",function(elem){
+			CRUD.select("select*from t_pedidos where rowid='"+$scope.PedidoRowid[1]+"'",function(pedidoD){
 				$scope.pedidos=pedidoD;
 				$scope.date=$scope.pedidos.fecha_solicitud;
 				$scope.dateEntrega=$scope.pedidos.fecha_entrega;
@@ -247,7 +246,6 @@ app_angular.controller("pedidoController",['Conexion','$scope','$location','$htt
 		}
 		
 	}
-	CRUD.select("select count(*) as cantidad from erp_entidades_master ",function(elem){console.log(elem.cantidad)})
 	$scope.onChangeSucursal=function(){
 		if ($scope.sucursal==undefined) {$scope.pedidos.rowid_lista_precios='';$scope.list_items=[];return}
 		$scope.list_precios=[];
