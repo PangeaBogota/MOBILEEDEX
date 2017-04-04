@@ -78,6 +78,10 @@ app_angular.controller("pedidoController",['Conexion','$scope','$location','$htt
 		{
 			$scope.PedidoRowid=$scope.PedidoRowid.replace('p','');
 		}
+		else
+		{
+			$scope.PedidoRowid='';		
+		}
 	}
 	catch(error)
 	{
