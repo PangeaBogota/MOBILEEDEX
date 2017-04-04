@@ -116,7 +116,7 @@ app_angular.controller("pedidoController",['Conexion','$scope','$location','$htt
 						})
 					}
 				})
-				CRUD.select("select vw.*,tpd.cantidad as cantidaddetalle from vw_items_precios vw inner join  t_pedidos_detalle tpd on tpd.rowid_item=vw.rowid_item where tpd.rowid_pedido='"+pedido[1]+"' and vw.rowid="+$scope.pedidos.rowid_lista_precios+"  ",function(detallePedido){
+				CRUD.select("select vw.*,tpd.cantidad as cantidaddetalle from vw_items_precios vw inner join  t_pedidos_detalle tpd on tpd.rowid_item=vw.rowid_item where tpd.rowid_pedido='"+$scope.PedidoRowid+"' and vw.rowid="+$scope.pedidos.rowid_lista_precios+"  ",function(detallePedido){
 					$scope.item=detallePedido;
 					$scope.item.cantidad=detallePedido.cantidaddetalle;
 					$scope.item.iva=$scope.item.precio*$scope.item.impuesto_porcentaje/100;
