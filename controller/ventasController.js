@@ -6,7 +6,9 @@ var app_angular = angular.module('PedidosOnline');
 
 //CONTROLADOR DEL MOULO DE VENTAS
 app_angular.controller("pedidoController",['Conexion','$scope','$location','$http','$routeParams','$timeout',function (Conexion,$scope,$location,$http,$routeParams,$timeout) {
-	$scope.tituloPagina='';
+	try
+	{
+			$scope.tituloPagina='';
 	$scope.ejemplovista=[];
 	$scope.sessiondate=JSON.parse(window.localStorage.getItem("CUR_USER"));
 	$scope.validacion=0;
@@ -52,10 +54,18 @@ app_angular.controller("pedidoController",['Conexion','$scope','$location','$htt
 	function(elem)
 	{
 		$scope.list_tercero.push(elem);
-		if ($scope.Parametro!=undefined   && elem.rowid==$scope.Parametro) 
+		try
 		{
-			$scope.terceroSelected=elem;
+			if ($scope.Parametro!=undefined   && elem.rowid==$scope.Parametro) 
+			{
+				$scope.terceroSelected=elem;
+			}
 		}
+		catch(error)
+		{
+			alert(error + " 1");
+		}
+		
 	});
 	var pedido=$routeParams.personId;
 	if (pedido==undefined) {
@@ -68,9 +78,10 @@ app_angular.controller("pedidoController",['Conexion','$scope','$location','$htt
 			pedido=$scope.Parametro.split('|');
 		}
 	}
-	catch
+	catch(error)
 	{
 		pedido='';
+		alert(error + " 2");
 	}
 	
 	
@@ -531,6 +542,11 @@ app_angular.controller("pedidoController",['Conexion','$scope','$location','$htt
     angular.element('#ui-id-1').mouseover(function (){
         angular.element('#ui-id-1').show();
     });
+	}
+	catch(error)
+	{
+		alert(error + " 4 ");
+	}
 }]);
 
 app_angular.controller("PedidosController",['Conexion','$scope',function (Conexion,$scope) {
