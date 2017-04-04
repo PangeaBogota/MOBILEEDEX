@@ -6,6 +6,9 @@ var app_angular = angular.module('PedidosOnline');
 
 //CONTROLADOR DEL MOULO DE VENTAS
 app_angular.controller("pedidoController",['Conexion','$scope','$location','$http','$routeParams','$timeout',function (Conexion,$scope,$location,$http,$routeParams,$timeout) {
+	try
+	{
+		$scope.tituloPagina='';
 	$scope.ejemplovista=[];
 	$scope.sessiondate=JSON.parse(window.localStorage.getItem("CUR_USER"));
 	$scope.validacion=0;
@@ -513,6 +516,11 @@ app_angular.controller("pedidoController",['Conexion','$scope','$location','$htt
     angular.element('#ui-id-1').mouseover(function (){
         angular.element('#ui-id-1').show();
     });
+	}
+	catch(err) {
+        alert(err);
+    }
+
 }]);
 
 app_angular.controller("PedidosController",['Conexion','$scope',function (Conexion,$scope) {
