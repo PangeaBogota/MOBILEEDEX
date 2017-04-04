@@ -8,6 +8,7 @@ var app_angular = angular.module('PedidosOnline');
 app_angular.controller("pedidoController",['Conexion','$scope','$location','$http','$routeParams','$timeout',function (Conexion,$scope,$location,$http,$routeParams,$timeout) {
 	try
 	{
+		debugger
 		$scope.tituloPagina='';
 	$scope.ejemplovista=[];
 	$scope.sessiondate=JSON.parse(window.localStorage.getItem("CUR_USER"));
