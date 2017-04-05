@@ -2,13 +2,12 @@
  * Created by dev10 on 1/7/2016.
  */
 var app_angular = angular.module('PedidosOnline');
-
-
 //CONTROLADOR DEL MOULO DE VENTAS
 app_angular.controller("pedidoController",['Conexion','$scope','$location','$http','$routeParams','$timeout',function (Conexion,$scope,$location,$http,$routeParams,$timeout) {
 	try
 	{
-			$scope.tituloPagina='';
+		$scope.OC='';
+		$scope.tituloPagina='';
 	$scope.ejemplovista=[];
 	$scope.sessiondate=JSON.parse(window.localStorage.getItem("CUR_USER"));
 	$scope.validacion=0;
@@ -51,6 +50,7 @@ app_angular.controller("pedidoController",['Conexion','$scope','$location','$htt
     $scope.Parametro=$routeParams.personId;
     $scope.tituloPagina='Nuevo Pedido';
     $scope.editarpedido=false;
+    $scope.observaciones='';
 	CRUD.select("select identificacion ||'-'|| razonsocial as  cliente,* from erp_terceros  order by razonsocial",
 	function(elem)
 	{
@@ -68,7 +68,6 @@ app_angular.controller("pedidoController",['Conexion','$scope','$location','$htt
 		}
 		
 	});
-	debugger
 	if ($scope.PedidoRowid==undefined) {
 		$scope.PedidoRowid='';
 	}
@@ -88,8 +87,6 @@ app_angular.controller("pedidoController",['Conexion','$scope','$location','$htt
 		$scope.PedidoRowid='';
 		alert(error + " 2");
 	}
-	
-	
 	if ($scope.PedidoRowid.length>0) {
 		$('.creado').attr("disabled","disabled") 
 		
@@ -100,6 +97,8 @@ app_angular.controller("pedidoController",['Conexion','$scope','$location','$htt
 				$scope.pedidos=pedidoD;
 				$scope.date=$scope.pedidos.fecha_solicitud;
 				$scope.dateEntrega=$scope.pedidos.fecha_entrega;
+				$scope.OC=	$scope.pedidos.orden_compra;
+				$scope.observaciones=	$scope.pedidos.observaciones;
 				$("#fecha_entrega").val($scope.pedidos.fecha_entrega);
 				$("#fecha_solicitud").val($scope.pedidos.fecha_solicitud);
 				$scope.list_tercero=[];
@@ -421,7 +420,8 @@ app_angular.controller("pedidoController",['Conexion','$scope','$location','$htt
 		$scope.pedidos.usuariocreacion=$scope.sessiondate.nombre_usuario;
 		$scope.pedidos.rowid_empresa=4;
 		$scope.pedidos.id_cia=1;
-		debugger
+		$scope.pedidos.orden_compra=$scope.OC;
+		$scope.pedidos.observaciones=$scope.observaciones;
 		$scope.pedidos.fecha_solicitud=$scope.pedidos.fecha_solicitud;
 		$scope.pedidos.fecha_pedido=$scope.pedidos.fecha_solicitud;
 		$scope.pedidos.fecha_entrega=$scope.pedidos.fecha_entrega;
