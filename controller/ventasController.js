@@ -97,8 +97,10 @@ app_angular.controller("pedidoController",['Conexion','$scope','$location','$htt
 				$scope.pedidos=pedidoD;
 				$scope.date=$scope.pedidos.fecha_solicitud;
 				$scope.dateEntrega=$scope.pedidos.fecha_entrega;
-				$scope.OC=	$scope.pedidos.orden_compra;
-				$scope.observaciones=	$scope.pedidos.observaciones;
+				$scope.OC=$scope.pedidos.orden_compra;
+				$scope.observaciones=$scope.pedidos.observaciones;
+				document.getElementById("orden_compra").value=$scope.pedidos.orden_compra;
+				document.getElementById("observaciones").value=$scope.pedidos.orden_compra;
 				$("#fecha_entrega").val($scope.pedidos.fecha_entrega);
 				$("#fecha_solicitud").val($scope.pedidos.fecha_solicitud);
 				$scope.list_tercero=[];
