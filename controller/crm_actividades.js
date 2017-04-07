@@ -6,7 +6,7 @@ var app_angular= angular.module('PedidosOnline');
 app_angular.controller("actividadesController",['Conexion','$scope', '$routeParams', '$window',function (Conexion,$scope,$routeParams,$window) {
 	$scope.Latitude='';
 	$scope.Longitud='';
-	var options = {enableHighAccuracy: true, timeout: 3000, maximumAge: 18000000};
+	var options = {enableHighAccuracy: true, timeout: 2000, maximumAge: 18000000};
 	function geolocation()
     {
         
@@ -107,7 +107,7 @@ app_angular.controller("actividadesController",['Conexion','$scope', '$routePara
 	$scope.actividadSelected=[];
 	$scope.actividad=[];
 	CRUD.select('select * from m_estados where  tipo_estado="ACTIVIDAD"',function(elem){$scope.listEstadoActividad.push(elem)});
-	CRUD.select('select * from m_metaclass where  class_code="ACTIVIDAD.TIPO.RELACION" and tipo_reg_nombre="Cliente"',function(elem){$scope.listActividadTipoRelacion.push(elem)});
+	CRUD.select('select * from m_metaclass where  class_code="ACTIVIDAD.TIPO.RELACION" and tipo_reg_codigo IN ("Cliente","Prospecto","ADMINISTRATIVO","OTROS")',function(elem){$scope.listActividadTipoRelacion.push(elem)});
 	CRUD.select('select * from m_metaclass where  class_code="ACTIVIDAD.PRIORIDAD"',function(elem){$scope.listActividadPrioridad.push(elem)});
 	CRUD.select('select * from m_metaclass where  class_code="ACTIVIDAD.TIPO"',function(elem){$scope.listActividadTipo.push(elem)});
 	$scope.RefrescarVista=function(){
@@ -141,6 +141,8 @@ app_angular.controller("actividadesController",['Conexion','$scope', '$routePara
 		$('#fc_create').click();
 	}
 	$scope.guardarActividad=function(estado){
+		debugger
+		
 		if (estado) {
 			Mensajes('Verificar Campos Requeridos','error','')
 			return;
@@ -164,7 +166,6 @@ app_angular.controller("actividadesController",['Conexion','$scope', '$routePara
         {
         	$scope.Latitude=position.coords.latitude;
 			$scope.Longitud= position.coords.longitude;
-			debugger
             $scope.EnviarRegistro();
         }
         function onError(error)
@@ -174,20 +175,33 @@ app_angular.controller("actividadesController",['Conexion','$scope', '$routePara
         
 	}
 	$scope.EnviarRegistro=function(){
-		debugger
+		if ($scope.NuevoEvento.tipo_relacion=="ADMINISTRATIVO" || $scope.NuevoEvento.tipo_relacion=="OTROS" || $scope.NuevoEvento.tipo_relacion=="Prospecto") 
+		{
+			if ($scope.NuevoEvento.descripcion==undefined || $scope.NuevoEvento.descripcion=="") {
+				Mensajes('Se debe agregar una descripcion','error','');
+				return;
+			}
+			$scope.NuevoEvento.relacionado_a="";
+		}
+		else
+		{
+			if ($scope.terceroSelected==undefined || $scope.terceroSelected.length==0 ) {
+				Mensajes('Se debe seleccionar un cliente.','error','');
+				return;
+			}
+			$scope.NuevoEvento.relacionado_a=$scope.terceroSelected.razonsocial;
+		}
 		$scope.ultimoRegistro=[];
 		CRUD.select('select max(rowid) as rowid from crm_actividades',function(elem){$scope.ultimoRegistro.push(elem);
-			debugger
 			$scope.ultimoRegistroseleccionado=$scope.ultimoRegistro[0];
 			$scope.NuevoEvento.rowid=$scope.ultimoRegistroseleccionado.rowid+1;
 			$scope.NuevoEvento.usuario_creacion=$scope.sessiondate.nombre_usuario;
-			$scope.NuevoEvento.relacionado_a=$scope.terceroSelected.razonsocial;
+			
 			$scope.NuevoEvento.sincronizado='false';
 			$scope.NuevoEvento.fecha_inicial=$scope.selectedDate($scope.horario.fechaInicial)+' '+$scope.getHour($scope.horario.horaInicial) ;
 			$scope.NuevoEvento.fecha_final=$scope.selectedDate($scope.horario.fechaFinal)+' '+$scope.getHour($scope.horario.horaFinal) ;
 			$scope.NuevoEvento.longitud=$scope.Longitud;
 			$scope.NuevoEvento.latitud=$scope.Latitude;
-			
 			$scope.NuevoEvento.fecha_creacion=$scope.CurrentDate();
 			CRUD.insert('crm_actividades',$scope.NuevoEvento)
 			

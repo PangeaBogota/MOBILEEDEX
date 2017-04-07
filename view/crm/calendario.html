@@ -112,7 +112,7 @@
                                         <div class="row form-group">
                                             <div class="col-md-12 col-sm-12 col-xs-12" style="padding: 0px">
                                                 <input  placeholder="Seleccionar Tercero" type="text" ng-model="Search" class="form-control "></input>
-                                                <select  required 
+                                                <select   
                                                     ng-model="terceroSelected" id="TerceroSelected" ng-options="partner as partner.razonsocial 
                                                     for partner in list_tercero | filter:Search" class="form-control" >
                                                 </select>
@@ -151,7 +151,7 @@
                                         </div>
                                         <div class="row form-group">
                                             <div class="col-md-12 col-sm-12 col-xs-12" style="padding: 0px">
-                                                <textarea class="form-control"  required id="descr" name="descr" ng-model="NuevoEvento.descripcion"></textarea>
+                                                <textarea class="form-control"   id="descr" name="descr" ng-model="NuevoEvento.descripcion"></textarea>
                                             </div>
                                         </div>
                                         
