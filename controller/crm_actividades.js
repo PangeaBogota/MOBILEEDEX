@@ -6,7 +6,7 @@ var app_angular= angular.module('PedidosOnline');
 app_angular.controller("actividadesController",['Conexion','$scope', '$routeParams', '$window',function (Conexion,$scope,$routeParams,$window) {
 	$scope.Latitude='';
 	$scope.Longitud='';
-	var options = {enableHighAccuracy: true, timeout: 2000, maximumAge: 18000000};
+	var options = {enableHighAccuracy: true, timeout: 5000, maximumAge: 18000000};
 	function geolocation()
     {
         
@@ -141,8 +141,6 @@ app_angular.controller("actividadesController",['Conexion','$scope', '$routePara
 		$('#fc_create').click();
 	}
 	$scope.guardarActividad=function(estado){
-		debugger
-		
 		if (estado) {
 			Mensajes('Verificar Campos Requeridos','error','')
 			return;
@@ -152,7 +150,6 @@ app_angular.controller("actividadesController",['Conexion','$scope', '$routePara
 			return;
 		}
 		if ($scope.selectedDate($scope.horario.fechaFinal)==$scope.selectedDate($scope.horario.fechaInicial)) {
-			debugger
 			var horainicial=$scope.getHour($scope.horario.horaInicial).replace(":","");
 			var horaFinal=$scope.getHour($scope.horario.horaFinal).replace(":","");
 			if (horainicial>horaFinal) {
@@ -161,7 +158,6 @@ app_angular.controller("actividadesController",['Conexion','$scope', '$routePara
 			}
 		}
 		var watchID = navigator.geolocation.getCurrentPosition(onSuccess, onError, options);
-
         function onSuccess(position)
         {
         	$scope.Latitude=position.coords.latitude;
