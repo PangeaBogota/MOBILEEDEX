@@ -46,8 +46,116 @@ app_angular.controller('sessionController',['bootbox','Conexion','$scope','$loca
     /*CRUD.select("select count(*) a from erp_terceros  ",function(elem){
         console.log(elem.a)
     });*/
-    
+    $scope.eliminacionRegistros=function(data)
+    {
+        if (data.actividad==true) 
+        {
+            CRUD.Updatedynamic("delete from crm_actividades");
+        }
+        if (data.pedido==true) 
+        {
+            CRUD.Updatedynamic("delete from t_pedidos");
+            CRUD.Updatedynamic("delete from t_pedidos_detalle");
+        }
+        if (data.tercero==true) 
+        {
+            CRUD.Updatedynamic("delete  from erp_terceros");
+            CRUD.Updatedynamic("delete from erp_terceros_punto_envio");
+            CRUD.Updatedynamic("delete from erp_terceros_sucursales");
+        }
+        if (data.item==true) 
+        {
+            CRUD.Updatedynamic("delete from erp_items");
+            CRUD.Updatedynamic("delete from erp_items_precios");
+        }
+        CRUD.Updatedynamic("delete from m_estados");
+        CRUD.Updatedynamic("delete from m_metaclass");
+        CRUD.Updatedynamic("delete from crm_contactos");
+        CRUD.Updatedynamic("delete from s_usuarios");
+        CRUD.Updatedynamic("delete from s_canales_usuario");
+        CRUD.Updatedynamic("delete from crm_localizacion");
+        CRUD.Updatedynamic("delete from erp_entidades_master");
+    }
+    $scope.validacionMaestrosSincronizar=function(data)
+    {
+        if (data.actividad==true && data.pedido==true && data.tercero==true && data.item==true) 
+        {
+            STEP_SINCRONIZACION = STEP_SINCRONIZACION_CONSTANTE.slice(0);
+            return;
+        }
+        STEP_SINCRONIZACION = STEP_SINCRONIZACION_CONSTANTE.slice(0);
+        if (data.actividad==false) 
+        {
+            for(var i=0; i < STEP_SINCRONIZACION.length; i++)
+            {
+                if (STEP_SINCRONIZACION[i]=="ACTIVIDADES") 
+                {
+                    STEP_SINCRONIZACION.splice(i,1);
+                }
+            } 
+        }
+        if (data.pedido==false) 
+        {
+            for(var i=0; i < STEP_SINCRONIZACION.length; i++)
+            {
+                if (STEP_SINCRONIZACION[i]=="PEDIDOS" ) 
+                {
+                    STEP_SINCRONIZACION.splice(i,1);
+                }
+            } 
+            for(var i=0; i < STEP_SINCRONIZACION.length; i++)
+            {
+                if (STEP_SINCRONIZACION[i]=="PEDIDOS_DETALLE" ) 
+                {
+                    STEP_SINCRONIZACION.splice(i,1);
+                }
+            } 
+        }
+        if (data.tercero==false) 
+        {
+            for(var i=0; i < STEP_SINCRONIZACION.length; i++)
+            {
+                if (STEP_SINCRONIZACION[i]=="TERCEROS" ) 
+                {
+                    STEP_SINCRONIZACION.splice(i,1);
+                }
+            } 
+            for(var i=0; i < STEP_SINCRONIZACION.length; i++)
+            {
+                if (STEP_SINCRONIZACION[i]=="SUCURSALES" ) 
+                {
+                    STEP_SINCRONIZACION.splice(i,1);
+                }
+            } 
+            for(var i=0; i < STEP_SINCRONIZACION.length; i++)
+            {
+                if (STEP_SINCRONIZACION[i]=="PUNTOS_ENVIO" ) 
+                {
+                    STEP_SINCRONIZACION.splice(i,1);
+                }
+            } 
+        }
+        if (data.item==false) 
+        {
+            for(var i=0; i < STEP_SINCRONIZACION.length; i++)
+            {
+                if (STEP_SINCRONIZACION[i]=="ITEMS") 
+                {
+                    STEP_SINCRONIZACION.splice(i,1);
+                }
+            } 
+            for(var i=0; i < STEP_SINCRONIZACION.length; i++)
+            {
+                if (STEP_SINCRONIZACION[i]=="ITEMS_PRECIOS") 
+                {
+                    STEP_SINCRONIZACION.splice(i,1);
+                }  
+            } 
+        }
+        
+    }
     $scope.sincronizar=function(){
+        $scope.MAESTROS_SINCRONIZACION=JSON.parse(window.localStorage.getItem("MAESTROS_SINCRONIZACION"));
         $scope.errorAlerta.bandera=0;
         ProcesadoShow();
         $scope.sincronizarPedidos();
@@ -63,25 +171,19 @@ app_angular.controller('sessionController',['bootbox','Conexion','$scope','$loca
             }else{
                 Mensajes('Datos Subidos Correctamente','success','')     
             }
-            
+            if ($scope.MAESTROS_SINCRONIZACION==null || $scope.MAESTROS_SINCRONIZACION==undefined || $scope.MAESTROS_SINCRONIZACION==NaN) 
+            {
+                $scope.MAESTROS_SINCRONIZACION={
+                    pedido:true,
+                    tercero:true,
+                    actividad:true,
+                    item:true
+                }
+            }
             //VACIAR TABLAS
-            CRUD.Updatedynamic("delete from crm_actividades");
-            CRUD.Updatedynamic("delete from t_pedidos");
-            CRUD.Updatedynamic("delete from t_pedidos_detalle");
-            CRUD.Updatedynamic("delete from erp_items");
-            CRUD.Updatedynamic("delete from erp_entidades_master");
-            CRUD.Updatedynamic("delete from erp_items_precios");
-            CRUD.Updatedynamic("delete  from erp_terceros");
-            CRUD.Updatedynamic("delete from erp_terceros_punto_envio");
-            CRUD.Updatedynamic("delete from erp_terceros_sucursales");
-            CRUD.Updatedynamic("delete from m_estados");
-            CRUD.Updatedynamic("delete from m_metaclass");
-            CRUD.Updatedynamic("delete from crm_contactos");
-            CRUD.Updatedynamic("delete from s_usuarios");
-            CRUD.Updatedynamic("delete from s_canales_usuario");
-            CRUD.Updatedynamic("delete from crm_localizacion");
-            
-            //
+            $scope.eliminacionRegistros($scope.MAESTROS_SINCRONIZACION);
+            $scope.validacionMaestrosSincronizar($scope.MAESTROS_SINCRONIZACION);
+            debugger
             Sincronizar($scope.sessiondate.nombre_usuario,$scope.sessiondate.codigo_empresa);
             var contador=0;
             var  stringSentencia='';
@@ -101,7 +203,6 @@ app_angular.controller('sessionController',['bootbox','Conexion','$scope','$loca
                     if (STEP_SINCRONIZACION[i] == ENTIDAD_PEDIDOS  && DATOS_ENTIDADES_SINCRONIZACION[i].length!=0 ) {
                         //CRUD.insert('t_pedidos',DATOS_ENTIDADES_SINCRONIZACION[i][j]);
                         //
-
                         if (NewQuery) {
                             stringSentencia=" insert into t_pedidos  ";
                             NewQuery=false;
@@ -700,11 +801,11 @@ app_angular.controller('sessionController',['bootbox','Conexion','$scope','$loca
             window.setTimeout(function(){
                 ProcesadoHiden();
                 $route.reload();
-                Mensajes('Sincronizado Con Exito','success','')
-            },10000)
+                Mensajes('Sincronizado Con Exito','success','')  
+            },7000)
             
             
-        },25000)
+        },12000)
         //Traer Nuevos Datos
     }
        $scope.queryBuild='    select  '+

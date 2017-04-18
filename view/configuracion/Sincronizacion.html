@@ -1,0 +1,33 @@
+<div   ng-controller='configController'>
+    <div >
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>Tipo de Sincronizacion </h2>
+                
+                <div class="clearfix"></div>
+            </div>
+                <br />
+                <form id="demo-form2" data-parsley-validate class="form-horizontal form-label-left">
+                    <div class="x_content">
+                        <div class="wizard_content" id="">
+                            <div class="form-group col-md-12 col-xs-12" >
+                                <label>Pedidos:
+                                    <input type="checkbox" ng-model="MAESTROS_SINCRONIZACION.pedido">
+                                </label><br/>
+                                <label>Actividades:
+                                    <input type="checkbox" ng-model="MAESTROS_SINCRONIZACION.actividad">
+                                </label><br/>
+                                <label>Terceros:
+                                    <input type="checkbox" ng-model="MAESTROS_SINCRONIZACION.tercero">
+                                </label><br/>
+                                <label>Items:
+                                    <input type="checkbox" ng-model="MAESTROS_SINCRONIZACION.item">
+                                </label><br/>
+                              <button class="btn btn-success" ng-click="Guardar()">Guardar</button>
+                            </div>   
+                        </div>
+                    </div>
+                </form>
+        </div>
+    </div>
+</div>

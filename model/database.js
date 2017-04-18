@@ -363,6 +363,10 @@ app_angular.service('Factory', function ($webSql) {
         "estadoID": {
             "type": "integer",
             "null": "NULL"
+        },
+        "fechacreacion": {
+            "type": "text",
+            "null": "NULL"
         }
 
     })

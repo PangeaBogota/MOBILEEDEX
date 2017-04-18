@@ -157,15 +157,18 @@ app_angular.controller("actividadesController",['Conexion','$scope', '$routePara
 			return;
 			}
 		}
+		ProcesadoShow();
 		var watchID = navigator.geolocation.getCurrentPosition(onSuccess, onError, options);
         function onSuccess(position)
         {
         	$scope.Latitude=position.coords.latitude;
 			$scope.Longitud= position.coords.longitude;
             $scope.EnviarRegistro();
+            ProcesadoHiden();
         }
         function onError(error)
         {
+        	ProcesadoHiden();
         	alert("Por favor habilitar la Ubicacion, Verificar Conexion a Internet!");
         }
         
@@ -207,6 +210,7 @@ app_angular.controller("actividadesController",['Conexion','$scope', '$routePara
 			$scope.localizacionRegistro.estadoID=$scope.NuevoEvento.rowid_estado;
 			$scope.localizacionRegistro.descripcion='Creacion';
 			$scope.localizacionRegistro.rowid_actividad=$scope.ultimoRegistroseleccionado.rowid+1;
+			$scope.localizacionRegistro.fechacreacion=$scope.CurrentDate();
 			CRUD.insert('crm_localizacion',$scope.localizacionRegistro)
 			$scope.horario=[];
 			$scope.terceroSelected=[];
@@ -252,11 +256,10 @@ app_angular.controller("actividadesController",['Conexion','$scope', '$routePara
 				$scope.actividad=elem;
 			});
             //CRUD.selectParametro('crm_actividades','rowid',calEvent.id,function(elem){$scope.actividadSelected.push(elem);$scope.actividad=$scope.actividadSelected[0]});
-
-
         }
 	}
 	$scope.ActualizarActividad=function(){
+		ProcesadoShow();
 		var watchID = navigator.geolocation.getCurrentPosition(onSuccess, onError, options);
         function onSuccess(position)
         {
@@ -269,15 +272,17 @@ app_angular.controller("actividadesController",['Conexion','$scope', '$routePara
 			$scope.localizacionRegistro.longitud=$scope.Longitud;
 			$scope.localizacionRegistro.rowid_actividad=$scope.actividad.rowid;
 			$scope.localizacionRegistro.estadoID=$scope.estado;
+			$scope.localizacionRegistro.fechacreacion=$scope.CurrentDate();
 			CRUD.insert('crm_localizacion',$scope.localizacionRegistro)
 			$scope.Latitude='';
 			$scope.Longitud='';
+			ProcesadoHiden();
         }
         function onError(error)
         {
+        	ProcesadoHiden();
         	alert("Por favor habilitar la Ubicacion, Verificar Conexion a Internet!");
         }
-		
 	}
 	$scope.estado="";
 	$scope.ConsultarDia=function(day){
