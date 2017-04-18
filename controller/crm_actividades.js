@@ -28,6 +28,7 @@ app_angular.controller("actividadesController",['Conexion','$scope', '$routePara
     $(document).ready(function () {
         geolocation();
     });
+    $scope.list_tercero=[];
 	$scope.Search;
 	$scope.registro=[];
 	$scope.terceroSelected;
@@ -49,7 +50,7 @@ app_angular.controller("actividadesController",['Conexion','$scope', '$routePara
 	
 	$scope.sessiondate=JSON.parse(window.localStorage.getItem("CUR_USER"));
 	
-	$scope.list_tercero=[];
+	
 	
 	$scope.horario=[];
 	$scope.CurrentDate=function(){
@@ -227,6 +228,8 @@ app_angular.controller("actividadesController",['Conexion','$scope', '$routePara
 	var started;
     var categoryClass;
     var ended;
+    $scope.terceroActividad=[];
+    $scope.modifica=false;
 	$scope.eventSources=$scope.events;
 	$scope.calOptions={
 		editable:true,
@@ -247,6 +250,7 @@ app_angular.controller("actividadesController",['Conexion','$scope', '$routePara
             $('#fc_ViewEvent').click();
             $scope.actividadesDia=[];
 			$scope.actividad=[];
+
 			CRUD.select("select * from vw_actividades_usuario where rowid= '"+calEvent.id+"' ",function(elem){
 				if (elem.canal=='null') 
 				{
@@ -254,16 +258,251 @@ app_angular.controller("actividadesController",['Conexion','$scope', '$routePara
 				}
 				$scope.estado=elem.rowid_estado
 				$scope.actividad=elem;
+				for (var i = 0; i < $scope.list_tercero.length; i++) {
+
+				 	if ($scope.list_tercero[i].razonsocial==$scope.actividad.relacionado_a) 
+				 	{
+				 		$scope.terceroActividad=$scope.list_tercero[i];
+				 	}
+				}
+				if ($scope.estado==1005) 
+				{
+					 $scope.modifica=false;
+				}
+				else
+				{
+					 $scope.modifica=true;
+				}
+				$scope.fechaInicial=new Date($scope.actividad.fecha_inicial);
+				$scope.fechaFinal=new Date($scope.actividad.fecha_final);
+				$scope.horaInicial=new Date($scope.actividad.fecha_final);
+				$scope.horaFinal=new Date($scope.actividad.fecha_final);
+
 			});
             //CRUD.selectParametro('crm_actividades','rowid',calEvent.id,function(elem){$scope.actividadSelected.push(elem);$scope.actividad=$scope.actividadSelected[0]});
         }
 	}
+	$scope.onchangeFecha=function(parm)
+	{
+		$scope.params=[];
+		$scope.params.fecha1=$scope.horario.fechaInicial;
+		$scope.params.fecha2=$scope.horario.fechaFinal;
+		$scope.params.hora1=$scope.horario.horaInicial;
+		$scope.params.hora2=$scope.horario.horaFinal;
+		if (parm=='Inicial') {
+			
+			if ($scope.params.fecha2!=undefined) {
+				$scope.params.fecha1=$scope.selectedDate($scope.params.fecha1)
+				$scope.params.fecha2=$scope.selectedDate($scope.params.fecha2)
+				$scope.params.fecha1=$scope.params.fecha1.replace('-','')
+				$scope.params.fecha2=$scope.params.fecha2.replace('-','')
+				$scope.params.fecha1=$scope.params.fecha1.replace('-','')
+				$scope.params.fecha2=$scope.params.fecha2.replace('-','')
+				if ($scope.params.fecha1>$scope.params.fecha2) {
+					Mensajes('Fecha Inicial No puede ser Mayor','error','');
+					document.getElementById("fechaInicial").valueAsDate = null;
+					$scope.horario.fechaInicial='';
+				}	
+			}
+		}else if (parm=='Final') {
+			if ($scope.params.fecha1!=undefined) {
+				$scope.params.fecha1=$scope.selectedDate($scope.params.fecha1)
+				$scope.params.fecha2=$scope.selectedDate($scope.params.fecha2)
+				$scope.params.fecha1=$scope.params.fecha1.replace('-','')
+				$scope.params.fecha2=$scope.params.fecha2.replace('-','')
+				$scope.params.fecha1=$scope.params.fecha1.replace('-','')
+				$scope.params.fecha2=$scope.params.fecha2.replace('-','')
+				if ($scope.params.fecha1>$scope.params.fecha2) {
+					Mensajes('Fecha Final No puede ser menor','error','');
+					document.getElementById("fechaFinal").valueAsDate = null;
+					$scope.horario.fechaFinal='';
+				}	
+			}
+		}else if (parm=='HInicial') {
+			
+			if ($scope.params.hora2!=undefined) {
+				if ($scope.params.fecha2==undefined || $scope.params.fecha1==undefined) {
+					Mensajes('Seleccionar Fechas Primero','error','');
+					$scope.horario.horaInicial='';
+					return
+				}
+				$scope.params.fecha1=$scope.selectedDate($scope.params.fecha1)
+				$scope.params.fecha2=$scope.selectedDate($scope.params.fecha2)
+				$scope.params.fecha1=$scope.params.fecha1.replace('-','')
+				$scope.params.fecha2=$scope.params.fecha2.replace('-','')
+				$scope.params.fecha2=$scope.params.fecha2.replace('-','')
+				$scope.params.fecha1=$scope.params.fecha1.replace('-','')
+				if ($scope.params.fecha1==$scope.params.fecha2) {
+					$scope.params.hora1=$scope.getHour($scope.params.hora1);
+					$scope.params.hora2=$scope.getHour($scope.params.hora2);
+					$scope.params.hora2=$scope.params.hora2.replace(':','')
+					$scope.params.hora1=$scope.params.hora1.replace(':','')
+					if ($scope.params.hora1>$scope.params.hora2) {
+						Mensajes('Hora inicial no puede ser Mayor el mismo dia','error','');
+						$scope.params.hora1=$scope.horario.horaInicial='';
+						return
+					}	
+				}
+			}
+		}else if (parm=='HFinal') {
+			if ($scope.params.hora1!=undefined) {
+				if ($scope.params.fecha2==undefined || $scope.params.fecha1==undefined) {
+					Mensajes('Seleccionar Fechas Primero','error','');
+					$scope.horario.horaFinal='';
+					return
+				}
+				$scope.params.fecha1=$scope.selectedDate($scope.params.fecha1)
+				$scope.params.fecha2=$scope.selectedDate($scope.params.fecha2)
+				$scope.params.fecha1=$scope.params.fecha1.replace('-','')
+				$scope.params.fecha2=$scope.params.fecha2.replace('-','')
+				$scope.params.fecha2=$scope.params.fecha2.replace('-','')
+				$scope.params.fecha1=$scope.params.fecha1.replace('-','')
+				if ($scope.params.fecha1==$scope.params.fecha2) {
+					$scope.params.hora1=$scope.getHour($scope.params.hora1);
+					$scope.params.hora2=$scope.getHour($scope.params.hora2);
+					$scope.params.hora2=$scope.params.hora2.replace(':','')
+					$scope.params.hora1=$scope.params.hora1.replace(':','')
+					if ($scope.params.hora1>$scope.params.hora2) {
+						Mensajes('Hora Final no puede ser menor  el mismo dia','error','');
+						$scope.params.hora1=$scope.horario.horaFinal='';
+					}	
+				}
+				
+			}
+		}
+	}
+	$scope.onchangeFechaV=function(parm)
+	{
+		debugger
+		$scope.params=[];
+		$scope.params.fecha1=$scope.fechaInicial;
+		$scope.params.fecha2=$scope.fechaFinal;
+		$scope.params.hora1=$scope.horaInicial;
+		$scope.params.hora2=$scope.horaFinal;
+		if (parm=='Inicial') {
+			
+			if ($scope.params.fecha2!=undefined) {
+				$scope.params.fecha1=$scope.selectedDate($scope.params.fecha1)
+				$scope.params.fecha2=$scope.selectedDate($scope.params.fecha2)
+				$scope.params.fecha1=$scope.params.fecha1.replace('-','')
+				$scope.params.fecha2=$scope.params.fecha2.replace('-','')
+				$scope.params.fecha1=$scope.params.fecha1.replace('-','')
+				$scope.params.fecha2=$scope.params.fecha2.replace('-','')
+				if ($scope.params.fecha1>$scope.params.fecha2) {
+					Mensajes('Fecha Inicial No puede ser Mayor','error','');
+					document.getElementById("fechaInicial1").valueAsDate = null;
+					$scope.fechaInicial='';
+				}	
+			}
+		}else if (parm=='Final') {
+			if ($scope.params.fecha1!=undefined) {
+				$scope.params.fecha1=$scope.selectedDate($scope.params.fecha1)
+				$scope.params.fecha2=$scope.selectedDate($scope.params.fecha2)
+				$scope.params.fecha1=$scope.params.fecha1.replace('-','')
+				$scope.params.fecha2=$scope.params.fecha2.replace('-','')
+				$scope.params.fecha1=$scope.params.fecha1.replace('-','')
+				$scope.params.fecha2=$scope.params.fecha2.replace('-','')
+				if ($scope.params.fecha1>$scope.params.fecha2) {
+					Mensajes('Fecha Final No puede ser menor','error','');
+					document.getElementById("fechaFinal1").valueAsDate = null;
+					$scope.fechaFinal='';
+				}	
+			}
+		}else if (parm=='HInicial') {
+			
+			if ($scope.params.hora2!=undefined) {
+				if ($scope.params.fecha2==undefined || $scope.params.fecha1==undefined) {
+					Mensajes('Seleccionar Fechas Primero','error','');
+					$scope.horaInicial='';
+					return
+				}
+				$scope.params.fecha1=$scope.selectedDate($scope.params.fecha1)
+				$scope.params.fecha2=$scope.selectedDate($scope.params.fecha2)
+				$scope.params.fecha1=$scope.params.fecha1.replace('-','')
+				$scope.params.fecha2=$scope.params.fecha2.replace('-','')
+				$scope.params.fecha2=$scope.params.fecha2.replace('-','')
+				$scope.params.fecha1=$scope.params.fecha1.replace('-','')
+				if ($scope.params.fecha1==$scope.params.fecha2) {
+					$scope.params.hora1=$scope.getHour($scope.params.hora1);
+					$scope.params.hora2=$scope.getHour($scope.params.hora2);
+					$scope.params.hora2=$scope.params.hora2.replace(':','')
+					$scope.params.hora1=$scope.params.hora1.replace(':','')
+					if ($scope.params.hora1>$scope.params.hora2) {
+						Mensajes('Hora inicial no puede ser Mayor el mismo dia','error','');
+						$scope.params.hora1=$scope.horaInicial='';
+						return
+					}	
+				}
+			}
+		}else if (parm=='HFinal') {
+			if ($scope.params.hora1!=undefined) {
+				if ($scope.params.fecha2==undefined || $scope.params.fecha1==undefined) {
+					Mensajes('Seleccionar Fechas Primero','error','');
+					$scope.horaFinal='';
+					return
+				}
+				$scope.params.fecha1=$scope.selectedDate($scope.params.fecha1)
+				$scope.params.fecha2=$scope.selectedDate($scope.params.fecha2)
+				$scope.params.fecha1=$scope.params.fecha1.replace('-','')
+				$scope.params.fecha2=$scope.params.fecha2.replace('-','')
+				$scope.params.fecha2=$scope.params.fecha2.replace('-','')
+				$scope.params.fecha1=$scope.params.fecha1.replace('-','')
+				if ($scope.params.fecha1==$scope.params.fecha2) {
+					$scope.params.hora1=$scope.getHour($scope.params.hora1);
+					$scope.params.hora2=$scope.getHour($scope.params.hora2);
+					$scope.params.hora2=$scope.params.hora2.replace(':','')
+					$scope.params.hora1=$scope.params.hora1.replace(':','')
+					if ($scope.params.hora1>$scope.params.hora2) {
+						Mensajes('Hora Final no puede ser menor  el mismo dia','error','');
+						$scope.params.hora1=$scope.horaFinal='';
+					}	
+				}
+				
+			}
+		}
+	}
+
 	$scope.ActualizarActividad=function(){
 		ProcesadoShow();
 		var watchID = navigator.geolocation.getCurrentPosition(onSuccess, onError, options);
         function onSuccess(position)
         {
-        	CRUD.Updatedynamic("update crm_actividades set rowid_estado='"+$scope.estado+"',sincronizado='false' where rowid="+$scope.actividad.rowid+"");	
+        	if ($scope.fechaInicial==undefined || $scope.fechaInicial==null || $scope.fechaInicial==NaN ||  $scope.fechaInicial=="") 
+        	{
+        		ProcesadoHiden();
+        		Mensajes('Llenar Toda la informacion','error','');
+        		return;
+        	}
+        	if ($scope.horaInicial==undefined || $scope.horaInicial==null || $scope.horaInicial==NaN ||  $scope.horaInicial=="") 
+        	{
+        		ProcesadoHiden();
+        		Mensajes('Llenar Toda la informacion','error','');
+        		return;
+        	}
+        	if ($scope.fechaFinal==undefined || $scope.fechaFinal==null || $scope.fechaFinal==NaN ||  $scope.fechaFinal=="") 
+        	{
+        		ProcesadoHiden();
+        		Mensajes('Llenar Toda la informacion','error','');
+        		return;
+        	}
+        	if ($scope.horaFinal==undefined || $scope.horaFinal==null || $scope.horaFinal==NaN ||  $scope.horaFinal=="") 
+        	{
+        		ProcesadoHiden();
+        		Mensajes('Llenar Toda la informacion','error','');
+        		return;
+        	}
+        	var terceroN='';
+    		try
+    		{
+    			terceroN=$scope.terceroActividad.razonsocial
+    		}
+    		catch(err)
+    		{
+    			terceroN='';
+    		}
+        	var FechaI=$scope.selectedDate($scope.fechaInicial)+' '+$scope.getHour($scope.horaInicial) ;
+			var FechaF=$scope.selectedDate($scope.fechaFinal)+' '+$scope.getHour($scope.horaFinal) ;
+        	CRUD.Updatedynamic("update crm_actividades set relacionado_a='"+terceroN+"',fecha_inicial='"+FechaI+"',fecha_final='"+FechaF+"', rowid_estado='"+$scope.estado+"',sincronizado='false' where rowid="+$scope.actividad.rowid+"");	
 			$scope.localizacionRegistro=[];
 			$scope.Latitude=position.coords.latitude;
 			$scope.Longitud= position.coords.longitude;
@@ -276,7 +515,13 @@ app_angular.controller("actividadesController",['Conexion','$scope', '$routePara
 			CRUD.insert('crm_localizacion',$scope.localizacionRegistro)
 			$scope.Latitude='';
 			$scope.Longitud='';
-			ProcesadoHiden();
+			
+			$('#CerrarModalV').click();
+			window.setTimeout(function(){
+				$scope.RefrescarVista();	
+				ProcesadoHiden();
+			},1000)
+			
         }
         function onError(error)
         {

@@ -183,7 +183,6 @@ app_angular.controller('sessionController',['bootbox','Conexion','$scope','$loca
             //VACIAR TABLAS
             $scope.eliminacionRegistros($scope.MAESTROS_SINCRONIZACION);
             $scope.validacionMaestrosSincronizar($scope.MAESTROS_SINCRONIZACION);
-            debugger
             Sincronizar($scope.sessiondate.nombre_usuario,$scope.sessiondate.codigo_empresa);
             var contador=0;
             var  stringSentencia='';
@@ -793,9 +792,9 @@ app_angular.controller('sessionController',['bootbox','Conexion','$scope','$loca
             localStorage.removeItem('GRAFICA_MES_CANTIDAD'); 
             localStorage.setItem('GRAFICA_MES_CANTIDAD',JSON.stringify(GRAFICA_MES_CANTIDAD));
             localStorage.removeItem('GRAFICA_MES_LABEL');
-            localStorage.setItem('GRAFICA_MES_LABEL',JSON.stringify( GRAFICA_MES_LABEL));
+            localStorage.setItem('GRAFICA_MES_LABEL',JSON.stringify(GRAFICA_MES_LABEL));
             localStorage.removeItem('GRAFICA_DIA_LABEL');
-            localStorage.setItem('GRAFICA_DIA_LABEL',JSON.stringify( GRAFICA_DIA_LABEL));
+            localStorage.setItem('GRAFICA_DIA_LABEL',JSON.stringify(GRAFICA_DIA_LABEL));
             localStorage.removeItem('GRAFICA_DIA_CANTIDAD');
             localStorage.setItem('GRAFICA_DIA_CANTIDAD',JSON.stringify(GRAFICA_DIA_CANTIDAD));
             window.setTimeout(function(){

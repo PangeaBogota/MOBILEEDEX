@@ -1755,12 +1755,12 @@ app_angular.service('Factory', function ($webSql) {
         " usu.id_canal_vendedor as canal,act.tipo,act.tema,  " +
         " act.ind_prioridad,act.descripcion, " +
         " act.fecha_inicial,act.fecha_final,act.rowid," +
-        " act.rowid_estado,"+
-        " usu.nombre_completo  as usuario , "+
+        " act.rowid_estado,act.relacionado_a,"+
+        " usu.nombre_completo  as usuario ,estado.nombre_estado, "+
         " case when usu.id_canal_vendedor=null  then  'false'  else  'true' end as cond " +
         " from " +
         " crm_actividades  act  inner join   s_usuarios usu  on " +
-        " usu.nombre_usuario=act.usuario_creacion " +
+        " usu.nombre_usuario=act.usuario_creacion inner join m_estados estado on  estado.id_estado=act.rowid_estado " +
         " ")
     db.select("create view if not exists vw_actividades_dia  " + 
         " as "  +

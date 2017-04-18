@@ -72,10 +72,10 @@
                                         </div>
                                         <div class="row form-group">
                                             <div class="col-md-8 col-sm-8 col-xs-8" style="padding-right: : 2px">
-                                                  <input type="date" class="form-control " required ng-model="horario.fechaInicial"></input>
+                                                  <input type="date" class="form-control " ng-change="onchangeFecha('Inicial')" id="fechaInicial" required ng-model="horario.fechaInicial"></input>
                                             </div>
                                             <div class="col-md-3 col-sm-3 col-xs-3" style="padding: 0px">
-                                                <input type="time" class="form-control " required ng-model="horario.horaInicial"></input>
+                                                <input type="time" class="form-control " ng-change="onchangeFecha('HInicial')" required ng-model="horario.horaInicial"></input>
                                             </div>
                                         </div>
                                         <div class="row form-group">
@@ -85,10 +85,10 @@
                                         </div>
                                         <div class="row form-group">
                                             <div class="col-md-8 col-sm-8 col-xs-8" style="padding-right: : 2px">
-                                                    <input type="date" class="form-control " required ng-model="horario.fechaFinal"></input>
+                                                    <input type="date" id="fechaFinal" class="form-control " ng-change="onchangeFecha('Final')" required ng-model="horario.fechaFinal"></input>
                                             </div>
                                             <div class="col-md-3 col-sm-3 col-xs-3" style="padding: 0px">
-                                                <input type="time" class="form-control " required ng-model="horario.horaFinal"></input>
+                                                <input type="time" class="form-control " required ng-change="onchangeFecha('HFinal')" ng-model="horario.horaFinal"></input>
                                             </div>
                                         </div>
                                         <div class="row form-group">
@@ -240,31 +240,75 @@
 
                                         <div class="x_content">
                                             <div class="row "  style="padding: 4px" >
-                                                <a >
                                                     <div class="row" ng-show="actividad.condicion" style="margin: 0px">
                                                         <div class="form-group col-md-12" style="margin: 1px">
-                                                            Canal: {{actividad.canal}}
+                                                           
+                                                            <label class="control-label "> Canal: </label> 
+                                                            {{actividad.canal}}
                                                         </div>
                                                         
                                                     </div>
                                                     <div class="row" style="margin: 0px">
                                                         <div class="form-group col-md-12" style="margin: 1px">
-                                                            Usuario: {{actividad.usuario}}
+                                                            
+                                                            <label class="control-label ">Usuario:</label>  
+                                                            {{actividad.usuario}}
                                                         </div>
                                                         
                                                     </div>
                                                     <div class="row" style="margin: 0px">
                                                         <div class="form-group col-md-12" style="margin: 1px">
-                                                            Asunto: {{actividad.tema}}
+                                                             <label class="control-label ">Asunto :</label> 
+                                                             {{actividad.tema}}
                                                         </div>
                                                         
                                                     </div>
-                                                    <div class="row" style="margin: 0px">
+                                                    <div class="row" style="margin: 0px" ng-hide="modifica">
                                                         <div class="form-group col-md-12" style="margin: 1px">
-                                                            Descripcion :<strong> {{actividad.descripcion}}</strong>
+                                                             <label class="control-label ">Relacion</label> 
+                                                            <strong> {{actividad.relacionado_a}}</strong>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row" ng-show="modifica">
+                                                        <div class="form-group col-md-12" style="margin: 1px">
+                                                            <div class="form-group col-md-12" style="margin: 1px">
+                                                                 <label class="control-label ">Relacion</label> 
+                                                                 <input  placeholder="Seleccionar Tercero" type="text" ng-model="Search1" class="form-control "></input>
+                                                                 <select   
+                                                                    ng-model="terceroActividad" id="terceroActividad" ng-options="partner as partner.razonsocial 
+                                                                    for partner in list_tercero | filter:Search1" class="form-control" >
+                                                                </select>
+                                                            </div>
+                                                           
                                                         </div>
                                                     </div>
                                                     <div class="row" style="margin: 0px">
+                                                        <div class="form-group col-md-12" style="margin: 1px">
+                                                             <label class="control-label ">Descripcion :</label> 
+                                                            <strong> {{actividad.descripcion}}</strong>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row" ng-show="modifica">
+                                                        <div class="form-group col-md-12" style="margin: 1px;width: 100%">
+                                                            <div class="form-group col-md-12" style="margin: 1px;width: 100%">
+                                                                <label class="control-label ">Fecha Inicial :</label> 
+                                                                <input type="date"  id="fechaInicial1" class="form-control " ng-change="onchangeFechaV('Inicial')"  required ng-model="fechaInicial"></input>
+                                                                <input type="time"   class="form-control " ng-change="onchangeFechaV('HInicial')" required ng-model="horaInicial"></input>
+                                                            </div>
+                                                           
+                                                        </div>
+                                                    </div>
+                                                    <div class="row" ng-show="modifica">
+                                                        <div class="form-group col-md-12" style="margin: 0px;width: 100%">
+                                                            <div class="form-group col-md-12" style="margin: 1px;width: 100%">
+                                                                <label class="control-label ">Fecha Final :</label> 
+                                                                <input type="date" id="fechaFinal1" class="form-control " ng-change="onchangeFechaV('Final')" required ng-model="fechaFinal"></input>
+                                                                <input type="time"  class="form-control " ng-change="onchangeFechaV('HFinal')" required ng-model="horaFinal"></input>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="row" style="margin: 0px" ng-hide="modifica">
                                                         
                                                         <div class="form-group col-md-4" style="margin: 1px">
                                                             Fecha Inicial:{{actividad.fecha_inicial}}
@@ -273,26 +317,32 @@
                                                            Fecha Final :<strong>  {{actividad.fecha_final}}</strong>
                                                         </div>
                                                     </div>
-                                                    <div class="row">
-                                                        <div class="form-group col-md-12" style="margin: 1px">
-                                                         <div class="form-group col-md-12" style="margin: 1px">
-                                                             Estado: <select  required
-                                                    ng-model="estado"  ng-options="partner.id_estado as partner.nombre_estado 
-                                                    for partner in listEstadoActividad " class="form-control"  >
-                                                </select>
+                                                    <div class="row" ng-show="modifica">
+                                                        <div class="form-group col-md-12" style="margin: 1px;width: 100%">
+                                                         <div class="form-group col-md-12" style="margin: 1px;width: 100%">
+                                                             <label class="control-label ">Estado</label> 
+                                                             <select  required
+                                                                ng-model="estado"  ng-options="partner.id_estado as partner.nombre_estado 
+                                                                for partner in listEstadoActividad " class="form-control"  >
+                                                            </select>
                                                         </div>
                                                            
                                                         </div>
                                                     </div>
-                                                </a>
+                                                    <div class="row" style="margin: 0px" ng-hide="modifica">
+                                                        <div class="form-group col-md-12" style="margin: 1px">
+                                                             <label class="control-label ">Estado</label> 
+                                                             <strong> {{actividad.nombre_estado}}</strong>
+                                                        </div>
+                                                    </div>
                                             </div>  
                                         </div>
                                     </form>
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-primary " ng-click="ActualizarActividad()" data-dismiss="modal">Actualizar</button>
-                                <button type="button" class="btn btn-default antoclose2" data-dismiss="modal">Cerrar</button>
+                                <button type="button" class="btn btn-primary " ng-show="modifica" ng-click="ActualizarActividad()" >Actualizar</button>
+                                <button type="button" class="btn btn-default antoclose2" id="CerrarModalV" data-dismiss="modal">Cerrar</button>
                             </div>
                         </div>
                     </div>
