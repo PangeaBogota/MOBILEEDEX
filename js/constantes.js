@@ -23,9 +23,9 @@ var STEP_SINCRONIZACION=
     [
         ENTIDAD_GRAFICA_DIARIO,
         ENTIDAD_GRAFICA_MENSUAL,
-        //                    ENTIDAD_MODULOS_CONFIG,
-        //                    ENTIDAD_OPCIONES_MENU,
-        //                    ENTIDAD_PARAMETROS,
+                 //           ENTIDAD_MODULOS_CONFIG,
+                 //           ENTIDAD_OPCIONES_MENU,
+                 //           ENTIDAD_PARAMETROS,
         ENTIDAD_USUARIOS,
         ENTIDAD_CANALES,
         ENTIDAD_TERCEROS,
@@ -33,8 +33,32 @@ var STEP_SINCRONIZACION=
         ENTIDAD_MAESTROS,
         ENTIDAD_PUNTOS_ENVIO,
         ENTIDAD_CONTACTOS,
-                            ENTIDAD_METACLASS,
-                            ENTIDAD_LOCALIZACION,
+                           ENTIDAD_METACLASS,
+                         ENTIDAD_LOCALIZACION,
+        ENTIDAD_ITEMS,
+        ENTIDAD_ITEMS_PRECIOS,
+        ENTIDAD_ESTADOS,
+        ENTIDAD_ACTIVIDADES,
+        ENTIDAD_PEDIDOS,
+        ENTIDAD_PEDIDOS_DETALLE
+        
+];
+var STEP_SINCRONIZACION_CONSTANTE=
+    [
+        ENTIDAD_GRAFICA_DIARIO,
+        ENTIDAD_GRAFICA_MENSUAL,
+                 //           ENTIDAD_MODULOS_CONFIG,
+                 //           ENTIDAD_OPCIONES_MENU,
+                 //           ENTIDAD_PARAMETROS,
+        ENTIDAD_USUARIOS,
+        ENTIDAD_CANALES,
+        ENTIDAD_TERCEROS,
+        ENTIDAD_SUCURSALES,
+        ENTIDAD_MAESTROS,
+        ENTIDAD_PUNTOS_ENVIO,
+        ENTIDAD_CONTACTOS,
+                           ENTIDAD_METACLASS,
+                         ENTIDAD_LOCALIZACION,
         ENTIDAD_ITEMS,
         ENTIDAD_ITEMS_PRECIOS,
         ENTIDAD_ESTADOS,
@@ -51,7 +75,7 @@ var STEP_SUBIRDATOS=
     ENTIDAD_ACTIVIDADES
     
     ];
-var DATABASE='edex27';
+var DATABASE='edex30';
 var DATOS_ENTIDADES_SINCRONIZACION = [];
 var CUR_USER=[];
 var ALMACENARDATOS=[];
