@@ -1,7 +1,6 @@
 app_angular.controller("configController",['Conexion','$scope','$route',function (Conexion,$scope,$route) {
 	try
 	{
-		debugger
 		$scope.MAESTROS_SINCRONIZACION=JSON.parse(window.localStorage.getItem("MAESTROS_SINCRONIZACION"));
 		if ($scope.MAESTROS_SINCRONIZACION==null || $scope.MAESTROS_SINCRONIZACION==undefined || $scope.MAESTROS_SINCRONIZACION==NaN) 
 		{
