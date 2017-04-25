@@ -9,7 +9,6 @@ app_angular.controller("actividadesController",['Conexion','$scope', '$routePara
 	var options = {enableHighAccuracy: true, timeout: 5000, maximumAge: 18000000};
 	function geolocation()
     {
-        
         var watchID = navigator.geolocation.getCurrentPosition(onSuccess, onError, options);
         function onSuccess(position)
         {
@@ -44,14 +43,7 @@ app_angular.controller("actividadesController",['Conexion','$scope', '$routePara
 				$('#fc_create').click();
 			}
 		})
-	
-	
-
-	
 	$scope.sessiondate=JSON.parse(window.localStorage.getItem("CUR_USER"));
-	
-	
-	
 	$scope.horario=[];
 	$scope.CurrentDate=function(){
 		$scope.day;
@@ -114,24 +106,41 @@ app_angular.controller("actividadesController",['Conexion','$scope', '$routePara
 	$scope.RefrescarVista=function(){
 		$scope.eventSources=[];
 		$scope.events=[];
-		CRUD.selectAllinOne('select rowid,  fecha_inicial, fecha_final,tema,ind_prioridad from crm_Actividades',
+		CRUD.selectAllinOne('select rowid,  fecha_inicial, fecha_final,tema,ind_prioridad,usuario_creacion from crm_Actividades order by usuario_creacion',
 		function(elem){
 			if (elem.length>0) 
 			{
+				var usuarioa='';
+				var Color='';
 				$scope.actividades=elem;
 				for (var i = 0; i < elem.length; i++) {
 					//hora Inicial
 					$scope.fechainicial=new Date(elem[i].fecha_inicial);
 					//Hora Final
 					$scope.fechafinal=new Date(elem[i].fecha_final);
-					if (elem[i].ind_prioridad=='Alta') {
+					/*if (elem[i].ind_prioridad=='Alta') {
 						$scope.events.push({id:elem[i].rowid,title:elem[i].tema,start:new Date(elem[i].fecha_inicial),end:new Date(elem[i].fecha_final),color:'red'})	
 					}
 					else if (elem[i].ind_prioridad=='Media') {
 						$scope.events.push({id:elem[i].rowid,title:elem[i].tema,start:new Date(elem[i].fecha_inicial),end:new Date(elem[i].fecha_final),color:'orange'})	
 					}
 					else{
-						$scope.events.push({id:elem[i].rowid,title:elem[i].tema,start:new Date(elem[i].fecha_inicial),end:new Date(elem[i].fecha_final),color:'blue'})	
+						
+					}*/
+
+					if (Color=='') {
+						Color=getRandomColor();
+					}
+					if (usuarioa=='') {
+						usuarioa=elem[i].usuario_creacion;
+					}
+					if (usuarioa!=elem[i].usuario_creacion) 
+					{
+						Color=getRandomColor();
+					}
+					$scope.events.push({id:elem[i].rowid,title:elem[i].usuario_creacion+"-"+elem[i].tema,start:new Date(elem[i].fecha_inicial),end:new Date(elem[i].fecha_final),color:Color});
+					if (usuarioa=='') {
+						usuarioa=elem[i].usuario_creacion;
 					}
 				}
 				$scope.eventSources=$scope.events;
@@ -142,6 +151,14 @@ app_angular.controller("actividadesController",['Conexion','$scope', '$routePara
 			
 		})
 	}
+	function getRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++ ) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
 	$scope.abrirModal=function(){
 		$('#fc_create').click();
 	}
