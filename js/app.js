@@ -804,7 +804,7 @@ app_angular.controller('sessionController',['bootbox','Conexion','$scope','$loca
             },7000)
             
             
-        },12000)
+        },13000)
         //Traer Nuevos Datos
     }
        $scope.queryBuild='    select  '+
@@ -870,8 +870,7 @@ app_angular.controller('sessionController',['bootbox','Conexion','$scope','$loca
                 $http({
                     method: 'GET',
                     url: 'http://demoedex.pedidosonline.co/Mobile/SubirDatos?usuario='+$scope.usuario+'&entidad=ACTIVIDADES&codigo_empresa=' + $scope.codigoempresa + '&datos=' + JSON.stringify(Actividad[i]),
-                    async:false,
-                    timeout:3000
+                    timeout:8000
                     }).then(
                     function success(data) { 
                          CRUD.Updatedynamic("update crm_actividades set rowid_web='"+data.data.rowid_web+"',sincronizado='true' where rowid="+data.data.rowid+"");
@@ -901,12 +900,10 @@ app_angular.controller('sessionController',['bootbox','Conexion','$scope','$loca
                 $http({
                     method: 'GET',
                     url: 'http://demoedex.pedidosonline.co/Mobile/SubirDatos?usuario='+$scope.usuario+'&entidad=LOCALIZACION&codigo_empresa=' + $scope.codigoempresa + '&datos=' + JSON.stringify(Actividad[i]),
-                    async:false,
-                    timeout:3000
+                    timeout:10000
                     }).then(
                     function success(data) { 
-                         CRUD.Updatedynamic("delete crm_localizacion where  rowid="+data.data.rowid+"");
-                   
+                        CRUD.Updatedynamic("delete from crm_localizacion where  rowid="+data.data.rowid+"");
                     }, 
                     function error(err) {
                         $scope.errorAlerta.bandera=1;
@@ -924,7 +921,7 @@ app_angular.controller('sessionController',['bootbox','Conexion','$scope','$loca
         setTimeout(function() {
             $scope.envioLocalizacion();
             $scope.envioPlano();
-        },5000);
+        },11000);
         
     }
     $scope.CreacionPlano=function()
