@@ -225,7 +225,14 @@ app_angular.controller("actividadesController",['Conexion','$scope', '$routePara
 				Mensajes('Se debe agregar una descripcion','error','');
 				return;
 			}
-			$scope.NuevoEvento.relacionado_a="";
+			if ($scope.terceroSelected==undefined || $scope.terceroSelected.length==0 ) {
+				$scope.NuevoEvento.relacionado_a="";
+			}
+			else
+			{
+				$scope.NuevoEvento.relacionado_a=$scope.terceroSelected.razonsocial;
+			}
+			
 		}
 		else
 		{
