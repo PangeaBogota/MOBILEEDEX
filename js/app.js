@@ -114,6 +114,7 @@ app_angular.controller('sessionController',['bootbox','Conexion','$scope','$loca
         {
             Mensajes('Sincronizacion Terminada','success','')    
             CRUD.Updatedynamic("update t_pedidos set sincronizado='true'  where sincronizado='plano'");
+            CRUD.Updatedynamic("update crm_actividades set sincronizado='true'  where sincronizado='false'");
             setTimeout(function(){
                 $route.reload();
                 ProcesadoHiden();
@@ -129,7 +130,7 @@ app_angular.controller('sessionController',['bootbox','Conexion','$scope','$loca
     {
         if (data.actividad==true) 
         {
-            //CRUD.Updatedynamic("delete from crm_actividades");
+            CRUD.Updatedynamic("delete from crm_actividades where sincronizado!='false'");
         }
         if (data.pedido==true) 
         {
@@ -252,7 +253,8 @@ app_angular.controller('sessionController',['bootbox','Conexion','$scope','$loca
     }
     $scope.sincronizar=function(){
         ProcesadoShow();
-        CRUD.Updatedynamic("update t_pedidos set sincronizado='envio_correcto'  where sincronizado='true'");
+        window.setTimeout(function(){
+            CRUD.Updatedynamic("update t_pedidos set sincronizado='envio_correcto'  where sincronizado='true'");
         $scope.MAESTROS_SINCRONIZACION=JSON.parse(window.localStorage.getItem("MAESTROS_SINCRONIZACION"));
         $scope.errorAlerta.bandera=0;
         
@@ -883,6 +885,8 @@ app_angular.controller('sessionController',['bootbox','Conexion','$scope','$loca
             Mensajes('Sincronizado Con Exito','success','')  
         },7000)
         //Traer Nuevos Datos
+        },1000)
+        
     }
    $scope.queryBuild='    select  '+
            ' t.key_user,'+

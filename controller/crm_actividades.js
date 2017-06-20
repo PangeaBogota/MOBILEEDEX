@@ -119,7 +119,6 @@ app_angular.controller("actividadesController",['Conexion','$scope', '$routePara
 				for (var i = 0; i < elem.length; i++) {
 					$scope.fechainicial=new Date(elem[i].fecha_inicial);
 					$scope.fechafinal=new Date(elem[i].fecha_final);
-					debugger
 					if ($scope.ObjUser[0].tipo_usuario=="VENDEDOR") 
 					{
 						if (elem[i].rowid_estado==1001) 
@@ -144,7 +143,6 @@ app_angular.controller("actividadesController",['Conexion','$scope', '$routePara
 						}
 						else
 						{
-
 						}
 					}
 					else
