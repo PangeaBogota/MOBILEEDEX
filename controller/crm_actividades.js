@@ -421,7 +421,6 @@ app_angular.controller("actividadesController",['Conexion','$scope', '$routePara
 	}
 	$scope.onchangeFechaV=function(parm)
 	{
-		debugger
 		$scope.params=[];
 		$scope.params.fecha1=$scope.fechaInicial;
 		$scope.params.fecha2=$scope.fechaFinal;

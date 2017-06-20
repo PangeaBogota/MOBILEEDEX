@@ -1,3 +1,4 @@
+
 app_angular.controller("configController",['Conexion','$scope','$route',function (Conexion,$scope,$route) {
 	try
 	{

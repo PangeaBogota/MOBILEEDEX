@@ -137,6 +137,7 @@
 
     <script type="text/javascript" src="js/app.js"></script>
     <script type="text/javascript" src="js/directivas.js"></script>
+    <script type="text/javascript" src="js/request.js"></script>
 
 
     <!-- Model JS -->
@@ -182,15 +183,10 @@
                 }
             });
         }
-        
-
-
-
         // Oculta Modal de procesando
         function ProcesadoHiden() {
             $("#ModalProcessing").modal('hide');
         }
-        
         // Genera Los Mensajes de Alertas
         function Mensajes(text, type, layot) {
             if (layot == '' || layot == null)
@@ -207,7 +203,6 @@
             });
             return false;
         }
-
         // Genera Alertas con estilo de la plantilla
         function MostrarAlerta(msj) {
             bootbox.alert(msj, function () {
@@ -232,7 +227,7 @@
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
                 type: 'get',
-                url: 'http://demos.pedidosonline.co/Mobile/Instalacion?step=2&username='+username+'&codigo_empresa=' + codigo_empresa+ '&entidad=' + STEP_SINCRONIZACION[i],
+                url: 'http://demoedex.pedidosonline.co/Mobile/Instalacion?step=2&username='+username+'&codigo_empresa=' + codigo_empresa+ '&entidad=' + STEP_SINCRONIZACION[i],
                 crossDomain: true,
                 async: false,
                 success: function (data) {
@@ -291,16 +286,10 @@
                         <a href="index.html#/" class="site_title itemNav"><i class="fa fa-dashboard"></i> <span>Pedidos Online</span></a>
                     </div>
                     <div class="clearfix"></div>
-
-
                     <!-- menu prile quick info -->
-                    
                     <!-- /menu prile quick info -->
-
                     <br />
-
                     <!-- sidebar menu -->
-                    
                     <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
 
                         <div class="menu_section">
@@ -395,14 +384,24 @@
                                         <span class="fa fa-user"></span>  {{sessiondate.nombre_usuario}}  <span class="fa fa-angle-down"></span>
                                     </a>
                                     <ul class="dropdown-menu dropdown-usermenu animated fadeInDown pull-right">
-                                        <li>
+                                        <!--<li>
                                             <a  ng-click="confirmarSincronizacion()" >
                                                 <span>Sincronizar</span>
                                             </a>
                                         </li>
+                                       -->
                                         <li><a href="login.html"><i class="fa fa-sign-out pull-right"></i>Cerrar Sesion</a>
                                         </li>
                                     </ul>
+                                </li>
+                                 <li >
+                                    <a  ng-click="confirmarSincronizacion()" id="sincronizarID" ><i style="font-size:1.5em"  class="fa fa-download"></i>
+                                                <span>Bajar</span>
+                                            </a>
+                                </li>
+                                <li >
+                                        <a id="subirID"   ng-click="uploadData()"><i style="font-size:1.5em"  class="fa fa-upload"></i>
+                                        <span>Subir</span></a>   
                                 </li>
                             </ul>
                         </nav>

@@ -379,7 +379,6 @@ app_angular.controller("pedidoController",['Conexion','$scope','$location','$htt
 		CRUD.select('select max(rowid) as rowid from t_pedidos',function(elem){
 		angular.forEach($scope.itemsAgregadosPedido,function(value,key){
 				$scope.detalle=[];
-				debugger
 				$scope.detalle.rowid_item=value.rowid_item;
 				if ($scope.editarpedido==true) {
 					$scope.detalle.rowid_pedido=$scope.pedidos.rowid;	
@@ -560,23 +559,31 @@ app_angular.controller("PedidosController",['Conexion','$scope',function (Conexi
 	$scope.pedidos = [];
 	$scope.pedidoSeleccionado=[];
 	$scope.detallespedido=[];
-    CRUD.select('select distinct pedidos.valor_impuesto,pedidos.fecha_solicitud,pedidos.sincronizado, pedidos.rowid as rowidpedido,terceros.razonsocial,sucursal.nombre_sucursal,pedidos.numpedido_erp,punto_envio.nombre_punto_envio,pedidos.valor_total,detalle.rowid_pedido,count(detalle.rowid_pedido) cantidaddetalles,sum(detalle.cantidad) as cantidadproductos from  t_pedidos pedidos inner join erp_terceros_sucursales sucursal on sucursal.rowid=pedidos.rowid_cliente_facturacion  inner join erp_terceros terceros on terceros.rowid=sucursal.rowid_tercero  left  join t_pedidos_detalle detalle on detalle.rowid_pedido=pedidos.rowid left join erp_terceros_punto_envio punto_envio on punto_envio.rowid=pedidos.id_punto_envio group by  pedidos.fecha_solicitud,detalle.rowid_pedido,pedidos.rowid,terceros.razonsocial,sucursal.nombre_sucursal,punto_envio.nombre_punto_envio,pedidos.valor_total order by pedidos.rowid desc    LIMIT 50',function(elem) {$scope.pedidos.push(elem)});
+	CRUD.select('select distinct 1 mobile, pedidos.valor_impuesto,pedidos.fecha_solicitud,pedidos.sincronizado, pedidos.rowid as rowidpedido,terceros.razonsocial,sucursal.nombre_sucursal,pedidos.numpedido_erp,punto_envio.nombre_punto_envio,pedidos.valor_total,detalle.rowid_pedido,count(detalle.rowid_pedido) cantidaddetalles,sum(detalle.cantidad) as cantidadproductos from  t_pedidos pedidos inner join erp_terceros_sucursales sucursal on sucursal.rowid=pedidos.rowid_cliente_facturacion  inner join erp_terceros terceros on terceros.rowid=sucursal.rowid_tercero  left  join t_pedidos_detalle detalle on detalle.rowid_pedido=pedidos.rowid left join erp_terceros_punto_envio punto_envio on punto_envio.rowid=pedidos.id_punto_envio where sincronizado!="envio_correcto" group by  pedidos.fecha_solicitud,detalle.rowid_pedido,pedidos.rowid,terceros.razonsocial,sucursal.nombre_sucursal,punto_envio.nombre_punto_envio,pedidos.valor_total order by pedidos.rowid desc    LIMIT 50',
+    	function(elem) {
+    		$scope.pedidos.push(elem)
+    	});
+    CRUD.select('select distinct 0 mobile, pedidos.valor_impuesto,pedidos.fecha_solicitud,pedidos.sincronizado, pedidos.rowid as rowidpedido,terceros.razonsocial,sucursal.nombre_sucursal,pedidos.numpedido_erp,punto_envio.nombre_punto_envio,pedidos.valor_total,detalle.rowid_pedido,count(detalle.rowid_pedido) cantidaddetalles,sum(detalle.cantidad) as cantidadproductos from  t_pedidos_web pedidos inner join erp_terceros_sucursales sucursal on sucursal.rowid=pedidos.rowid_cliente_facturacion  inner join erp_terceros terceros on terceros.rowid=sucursal.rowid_tercero  left  join t_pedidos_detalle_web detalle on detalle.rowid_pedido=pedidos.rowid left join erp_terceros_punto_envio punto_envio on punto_envio.rowid=pedidos.id_punto_envio group by  pedidos.fecha_solicitud,detalle.rowid_pedido,pedidos.rowid,terceros.razonsocial,sucursal.nombre_sucursal,punto_envio.nombre_punto_envio,pedidos.valor_total order by pedidos.rowid desc    LIMIT 50',
+    	function(elem) {
+    		$scope.pedidos.push(elem)
+    	});
     CRUD.select("select count(*) as cantidad",function(elem){
     	if (elem.cantidad==0) {
     		$scope.validacion=true;
     	}
     })
-	$scope.ConsultarDatos =function(pedido){
+	$scope.ConsultarDatos=function(pedido){
 		$scope.detallespedido=[];
 		$scope.pedidoSeleccionado=pedido;
-		CRUD.select('select items.item_referencia, items.item_descripcion, detalle.cantidad, detalle.precio_unitario, detalle.valor_base,detalle.valor_total_linea,detalle.valor_impuesto from t_pedidos pedido left join t_pedidos_detalle detalle on pedido.rowid = detalle.rowid_pedido inner join erp_items items on Detalle.rowid_item = items.rowid where pedido.rowid='+pedido.rowidpedido+'',
-		function(ele){$scope.detallespedido.push(ele);})
-		
-	}
-	$scope.Refrescar =function(){
-    	CRUD.selectAll('t_pedidos',function(elem) {$scope.pedidos.push(elem)});
-		$scope.Search = '';
-		
+		if (pedido.mobile==1) {
+			CRUD.select('select items.item_referencia, items.item_descripcion, detalle.cantidad, detalle.precio_unitario, detalle.valor_base,detalle.valor_total_linea,detalle.valor_impuesto from t_pedidos pedido left join t_pedidos_detalle detalle on pedido.rowid = detalle.rowid_pedido inner join erp_items items on Detalle.rowid_item = items.rowid where pedido.rowid='+pedido.rowidpedido+'',
+			function(ele){$scope.detallespedido.push(ele);})	
+		}
+		else
+		{
+			CRUD.select('select items.item_referencia, items.item_descripcion, detalle.cantidad, detalle.precio_unitario, detalle.valor_base,detalle.valor_total_linea,detalle.valor_impuesto from t_pedidos_web pedido left join t_pedidos_detalle_web detalle on pedido.rowid = detalle.rowid_pedido inner join erp_items items on Detalle.rowid_item = items.rowid where pedido.rowid='+pedido.rowidpedido+'',
+			function(ele){$scope.detallespedido.push(ele);})	
+		}
 	}
 	angular.element('ul.tabs li').click(function () {
         var tab_id = angular.element(this).find('a').data('tab');
@@ -604,4 +611,134 @@ app_angular.controller("PedidosController",['Conexion','$scope',function (Conexi
     angular.element('#ui-id-1').mouseover(function (){
         angular.element('#ui-id-1').show();
     });
+      $scope.queryBuild='    select  '+
+           ' t.key_user,'+
+           ' t.rowid_empresa,'+
+            't.id_cia,t.usuariocreacion,'+
+            't.fechacreacion,'+
+            't.rowid as e_rowid, '+
+            't.rowid_cliente_facturacion as  e_rowid_cliente_facturacion,'+
+            't.rowid_cliente_despacho as e_rowid_cliente_despacho,'+
+            't.rowid_lista_precios as e_rowid_lista_precios,'+
+            't.id_punto_envio as e_id_punto_envio,'+
+            't.fecha_pedido as e_fecha_pedido,'+
+            't.fecha_entrega as e_fecha_entrega,'+
+            't.valor_base as e_valor_base,'+
+            't.valor_descuento as e_valor_descuento,'+
+            't.valor_impuesto as e_valor_impuesto,'+
+            't.valor_total as e_valor_total,'+
+            't.id_estado as e_id_estado,'+
+            't.ind_estado_erp as e_ind_estado_erp,'+
+            't.valor_facturado as e_valor_facturado,'+
+            't.fecha_solicitud as e_fechasolicitud,'+
+            't.orden_compra as e_orden_compra,'+
+            't.modulo_creacion as e_modulo_creacion,'+
+            't.observaciones as e_observaciones,'+
+            'tpd.rowid as d_rowid,'+
+            'tpd.rowid_pedido as d_rowid_pedido,'+
+            'tpd.rowid_item as d_rowid_item,'+
+            'tpd.linea_descripcion as d_linea_descripcion,'+
+            'tpd.id_unidad as d_id_unidad,'+
+            'tpd.cantidad as d_cantidad,'+
+            'tpd.factor as d_factor,'+
+            'tpd.cantidad_base as d_cantidad_base,'+
+            'tpd.stock as d_stock,'+
+            'tpd.porcen_descuento as d_porcen_descuento,'+
+            'tpd.valor_base as d_valor_base,'+
+            'tpd.valor_impuesto as d_valor_impuesto,'+
+            'tpd.valor_total_linea as d_valor_total_linea,'+
+            'tpd.item_ext1 as d_item_ext1,'+
+            'tpd.rowid_item_ext as d_rowid_item_ext,'+
+            'tpd.rowid_bodega as d_rowid_bodega,'+
+            'tpd.precio_unitario as d_precio_unitario,'+
+            'tpd.valor_descuento as d_valor_descuento'+
+            ' from t_pedidos t'+
+            ' inner  join  t_pedidos_detalle tpd '+
+            ' on tpd.rowid_pedido=t.rowid'+
+            ' where  t.rowid =  __REQUIRED  and estado_sincronizacion=0 '+
+            ' order by t.rowid asc';
+    $scope.confirmar=function(pedido)
+    {
+    	ProcesadoShow();
+		$scope.SentenciaPlano=$scope.queryBuild.replace('__REQUIRED',pedido.rowidpedido);
+		CRUD.selectAllinOne($scope.SentenciaPlano,function(ped){
+        var rowidPedido=0;
+        var contador=0;
+        var  stringSentencia='';
+        var NewQuery=true;
+        var ultimoregistro=ped.length-1;
+        var step=0;
+        for (var i =0;i<ped.length;i++) {
+            contador++
+            if (ultimoregistro==i) {
+                step=1
+            }
+            rowidPedido=ped[i].e_rowid
+            if (NewQuery) {
+                stringSentencia=" insert into s_planos_pedidos  ";
+                NewQuery=false;
+            }
+            else{
+                stringSentencia+= "   UNION   ";
+            }
+            stringSentencia+=  "  SELECT  "+
+            //ped[i].e_rowid+
+
+            "null,'"+ped[i].key_user+
+            "','"+ped[i].rowid_empresa+
+            "','"+ped[i].id_cia+
+            "','"+ped[i].key_user+
+            "','"+ped[i].usuariocreacion+
+            "','"+ped[i].fechacreacion+
+            "','"+ped[i].e_rowid+
+            "','"+ped[i].e_rowid_cliente_facturacion+
+            "','"+ped[i].e_rowid_cliente_despacho+
+            "','"+ped[i].e_rowid_lista_precios+
+            "','"+ped[i].e_id_punto_envio+
+            "','"+ped[i].e_fecha_pedido+
+            "','"+ped[i].e_fecha_entrega+
+            "','"+ped[i].e_valor_base+
+            "','"+ped[i].e_valor_descuento+
+            "','"+ped[i].e_valor_impuesto+
+            "','"+ped[i].e_valor_total+
+            "','"+ped[i].e_id_estado+
+            "','"+ped[i].e_ind_estado_erp+
+            "','"+ped[i].e_valor_facturado+
+            "','"+ped[i].e_fechasolicitud+
+            "','"+ped[i].e_orden_compra+
+            "','"+ped[i].e_modulo_creacion+
+            "','"+ped[i].e_observaciones+
+            "','"+ped[i].d_rowid+
+            "','"+ped[i].d_rowid_pedido+
+            "','"+ped[i].d_rowid_item+
+            "','"+ped[i].d_linea_descripcion+
+            "','"+ped[i].d_id_unidad+
+            "','"+ped[i].d_cantidad+
+            "','"+ped[i].d_factor+
+            "','"+ped[i].d_cantidad_base+
+            "','"+ped[i].d_stock+
+            "','"+ped[i].d_porcen_descuento+
+            "','"+ped[i].d_valor_base+
+            "','"+ped[i].d_valor_impuesto+
+            "','"+ped[i].d_valor_total_linea+
+            "','"+ped[i].d_item_ext1+
+            "','"+ped[i].d_rowid_item_ext+
+            "','NULL','NULL','"+ped[i].d_rowid_bodega+
+            "','NULL','NULL','NULL','NULL',0,"+step+",0,0,'"+ped[i].d_precio_unitario+"','"+ped[i].d_valor_descuento+"','"+ped.length+"' "; 
+            if (contador==499) {
+                CRUD.Updatedynamic(stringSentencia)
+                NewQuery=true;
+                stringSentencia="";
+                contador=0;
+            }
+        }
+        if (stringSentencia!='') {
+            CRUD.Updatedynamic(stringSentencia)
+            NewQuery=true;
+        }
+        CRUD.Updatedynamic("update t_pedidos set estado_sincronizacion=1,sincronizado='plano' where rowid="+pedido.rowidpedido+"");
+        ProcesadoHiden();
+    })
+
+    }
 }]);

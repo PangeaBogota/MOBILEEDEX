@@ -257,8 +257,6 @@ app_angular.service('Factory', function ($webSql) {
             "null": "NULL"
         }
     })
-
-
     db.createTable('crm_actividades',{
         "rowid": {
             "type": "INTEGER",
@@ -674,6 +672,342 @@ app_angular.service('Factory', function ($webSql) {
 
 
     db.createTable('t_pedidos_detalle', {
+        "rowid": {
+            "type": "INTEGER",
+            "null": "NOT NULL",
+            "primary": true,
+            "auto_increment": true 
+        },
+        "rowid_pedido": {
+            "type": "INTEGER",
+            "null": "NULL"
+        },
+        "rowid_bodega": {
+            "type": "INTEGER",
+            "null": "NULL"
+        },
+        "rowid_item": {
+            "type": "INTEGER",
+            "null": "NULL"
+        },
+        "linea_descripcion": {
+            "type": "TEXT",
+            "null": "NULL"
+        },
+        "id_unidad": {
+            "type": "TEXT",
+            "null": "NULL"
+        },
+        "cantidad": {
+            "type": "REAL",
+            "null": "NULL"
+        },
+        "factor": {
+            "type": "REAL",
+            "null": "NULL"
+        },
+        "cantidad_base": {
+            "type": "REAL",
+            "null": "NULL"
+        },
+        "precio_unitario": {
+            "type": "REAL",
+            "null": "NULL"
+        },
+        "id_motivo": {
+            "type": "TEXT",
+            "null": "NULL"
+        },
+        "stock": {
+            "type": "REAL",
+            "null": "NULL"
+        },
+        "valor_base": {
+            "type": "REAL",
+            "null": "NULL"
+        },
+        "valor_impuesto": {
+            "type": "REAL",
+            "null": "NULL"
+        },
+        "porcen_descuento": {
+            "type": "REAL",
+            "null": "NULL"
+        },
+        "valor_porcen_descuento": {
+            "type": "REAL",
+            "null": "NULL"
+        },
+        "valor_descuento": {
+            "type": "REAL",
+            "null": "NULL"
+        },
+        "valor_total_linea": {
+            "type": "REAL",
+            "null": "NULL"
+        },
+        "unidad_medida": {
+            "type": "INTEGER",
+            "null": "NULL"
+        },
+        "fechacreacion": {
+            "type": "TEXT",
+            "null": "NULL"
+        },
+        "usuariocreacion": {
+            "type": "vTEXT",
+            "null": "NULL"
+        },
+        "fechamod": {
+            "type": "TEXT",
+            "null": " NULL"
+        },
+        "usuariomod": {
+            "type": "TEXT",
+            "null": " NULL"
+        },
+        "rowid_item_ext": {
+            "type": "INTEGER",
+            "null": "NULL"
+        },
+        "item_ext1": {
+            "type": "TEXT",
+            "null": " NULL"
+        },
+        "item_ext2": {
+            "type": "TEXT",
+            "null": " NULL"
+        },
+        "num_lote": {
+            "type": "TEXT",
+            "null": "NULL"
+        },
+        "fecha_anulacion": {
+            "type": "TEXT",
+            "null": "NULL"
+        },
+        "usuario_anulacion": {
+            "type": "TEXT",
+            "null": "NULL"
+        },
+        "flete": {
+            "type": "REAL",
+            "null": "NULL"
+        },
+        "porcen_descuento2": {
+            "type": "REAL",
+            "null": "NULL"
+        },
+        "valor_porcen_descuento2": {
+            "type": "REAL",
+            "null": "NULL"
+        },
+        "porcen_descuento3": {
+            "type": "REAL",
+            "null": "NULL"
+        },
+        "valor_porcen_descuento3": {
+            "type": "REAL",
+            "null": "NULL"
+        }
+        
+    });
+    db.createTable('t_pedidos_web', {
+        "rowid": {
+             "type": "INTEGER",
+            "null": "NOT NULL",
+            "primary": true,
+            "auto_increment": true 
+        },
+        "rowid_empresa": {
+            "type": "INTEGER",
+            "null": "NULL"
+        },
+        "id_cia": {
+            "type": "INTEGER",
+            "null": "NULL"
+        },
+        "rowid_cliente_facturacion": {
+            "type": "INTEGER",
+            "null": "NULL"
+        },
+        "rowid_cliente_despacho": {
+            "type": "INTEGER",
+            "null": "NULL"
+        },
+        "rowid_lista_precios": {
+            "type": "INTEGER",
+            "null": "NULL"
+        },
+        "rowid_bodega": {
+            "type": "INTEGER",
+            "null": "NULL"
+        },
+        "fecha_pedido": {
+            "type": "TEXT",
+            "null": "NULL"
+        },
+        "fecha_entrega": {
+            "type": "TEXT",
+            "null": "NULL"
+        },
+        "fecha_solicitud": {
+            "type": "TEXT",
+            "null": "NULL"
+        },
+        "id_punto_envio": {
+            "type": "TEXT",
+            "null": "NULL"
+        },
+        "observaciones": {
+            "type": "TEXT",
+            "null": "NULL"
+        },
+        "observaciones2": {
+            "type": "TEXT",
+            "null": "NULL"
+        },
+        "orden_compra": {
+            "type": "TEXT",
+            "null": "NULL"
+        },
+        "referencia": {
+            "type": "TEXT",
+            "null": "NULL"
+        },
+        "valor_base": {
+            "type": "REAL",
+            "null": "NULL"
+        },
+        "valor_descuento": {
+            "type": "REAL",
+            "null": "NULL"
+        },
+        "valor_impuesto": {
+            "type": "REAL",
+            "null": "NULL"
+        },
+        "valor_total": {
+            "type": "REAL",
+            "null": "NULL"
+        },
+        "id_estado": {
+            "type": "INTEGER",
+            "null": "NULL"
+        },
+        "numpedido_erp": {
+            "type": "TEXT",
+            "null": "NULL"
+        },
+        "numfactura_erp": {
+            "type": "TEXT",
+            "null": "NULL"
+        },
+        "estado_erp": {
+            "type": "TEXT",
+            "null": "NULL"
+        },
+        "valor_facturado": {
+            "type": "REAL",
+            "null": "NULL"
+        },
+        "id_cond_especial": {
+            "type": "TEXT",
+            "null": "NULL"
+        },
+        "fechacreacion": {
+            "type": "TEXT",
+            "null": "NULL"
+            //  "default": "CURRENT_TIMESTAMP" // default value
+        },
+        "usuariocreacion": {
+            "type": "TEXT",
+            "null": "NULL"
+        },
+        "fechamod": {
+            "type": "TEXT",
+            "null": " NULL"
+        },
+        "usuariomod": {
+            "type": "TEXT",
+            "null": "NULL"
+        },
+        "tipo_doc": {
+            "type": "TEXT",
+            "null": "NULL"
+        },
+        "id_vendedor": {
+            "type": "TEXT",
+            "null": "NULL"
+        },
+        "id_cond_pago": {
+            "type": "TEXT",
+            "null": "NULL"
+        },
+        "numremision_erp": {
+            "type": "TEXT",
+            "null": "NULL"
+        },
+        "id_co": {
+            "type": "TEXT",
+            "null": " NULL"
+        },
+        "transporte_conductor_cc": {
+            "type": "TEXT",
+            "null": "NULL"
+        },
+        "transporte_conductor_nombre": {
+            "type": "TEXT",
+            "null": "NULL"
+        },
+        "transporte_placa": {
+            "type": "TEXT",
+            "null": "NULL"
+        },
+        "fecha_anulacion": {
+            "type": "TEXT",
+            "null": "NULL"
+        },
+        "usuario_anulacion": {
+            "type": "TEXT",
+            "null": "NULL"
+        },
+        "id_nota": {
+            "type": "INTEGER",
+            "null": "NULL"
+        },
+        "criterio_clasificacion": {
+            "type": "TEXT",
+            "null": "NULL"
+        },
+        "ind_estado_erp": {
+            "type": "INTEGER",
+            "null": "NULL"
+        },
+        "modulo_creacion": {
+            "type": "TEXT",
+            "null": "NULL"
+        },
+        "sincronizado": {
+            "type": "TEXT",
+            "null": "NULL"
+        },
+        "key_mobile": {
+            "type": "TEXT",
+            "null": "NULL"
+        },
+        "estado_sincronizacion": {
+            "type": "INTEGER",
+            "null": "NULL"
+        },
+        "key_user": {
+            "type": "INTEGER",
+            "null": "NULL"
+        }
+    });
+
+
+    db.createTable('t_pedidos_detalle_web', {
         "rowid": {
             "type": "INTEGER",
             "null": "NOT NULL",
