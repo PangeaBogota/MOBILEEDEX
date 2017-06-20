@@ -554,7 +554,7 @@ app_angular.controller("pedidoController",['Conexion','$scope','$location','$htt
 	}
 }]);
 
-app_angular.controller("PedidosController",['Conexion','$scope',function (Conexion,$scope) {
+app_angular.controller("PedidosController",['Conexion','$scope','$route',function (Conexion,$scope,$route) {
 	$scope.validacion=false;
 	$scope.pedidos = [];
 	$scope.pedidoSeleccionado=[];
@@ -737,7 +737,12 @@ app_angular.controller("PedidosController",['Conexion','$scope',function (Conexi
             NewQuery=true;
         }
         CRUD.Updatedynamic("update t_pedidos set estado_sincronizacion=1,sincronizado='plano' where rowid="+pedido.rowidpedido+"");
-        ProcesadoHiden();
+        window.setTimeout(function(){
+            ProcesadoHiden();
+            $route.reload();
+            Mensajes('Confirmado','success','')  
+        },1000)
+        
     })
 
     }
